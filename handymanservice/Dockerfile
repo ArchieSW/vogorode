@@ -1,9 +1,9 @@
-FROM eclipse-temurin:17-jdk-alpine as build
+FROM gradle:8.0.1-jdk17-alpine as build
 WORKDIR /workspace/app
 
 COPY . /workspace/app
-RUN ls
-RUN  ./gradlew clean build
+RUN apk update && apk add gcompat
+RUN gradle clean build
 
 FROM eclipse-temurin:17-jdk-alpine
 VOLUME /tmp
