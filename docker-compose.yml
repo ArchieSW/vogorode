@@ -13,6 +13,8 @@ services:
       - "9090:9090"
     networks:
         - app-tier
+    environment:
+      - SERVICE_ADDRESS=0.0.0.0
   
   landscape-service:
     container_name: landscape-service
@@ -33,3 +35,5 @@ services:
       - "9091:9091"
     networks:
         - app-tier
+    environment:
+      - SERVICE_ADDRESS=0.0.0.0
