@@ -5,26 +5,31 @@ networks:
     driver: bridge
 
 services:
-  handymanservice:
-    container_name: handymanservice
-    build: ./handymanservice
+  handyman-service:
+    container_name: handyman-service
+    build: ./handyman-service
     ports:
       - "8080:8080"
+      - "9090:9090"
     networks:
         - app-tier
   
-  landscapeservice:
-    container_name: landscapeservice
-    build: ./landscapeservice
+  landscape-service:
+    container_name: landscape-service
+    build: ./landscape-service
     ports:
-      - "8081:8080"
+      - "8081:8081"
     networks:
         - app-tier
+    environment:
+      - HANDYMAN_ADDRESS=static://handyman-service:9090
+      - RANCHER_ADDRESS=static://rancher-service:9091
 
-  rancherservice:
-    container_name: rancherservice
-    build: ./rancherservice
+  rancher-service:
+    container_name: rancher-service
+    build: ./rancher-service
     ports:
-      - "8082:8080"
+      - "8082:8082"
+      - "9091:9091"
     networks:
         - app-tier
