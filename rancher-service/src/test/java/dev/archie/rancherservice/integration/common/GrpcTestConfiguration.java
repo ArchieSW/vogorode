@@ -14,14 +14,4 @@ import org.springframework.context.annotation.Configuration;
 })
 public class GrpcTestConfiguration {
 
-//    @Bean
-//    SystemService systemService() {
-//        return new SystemService(new GrpcServerProperties());
-//    }
-//
-//
-//    @Bean
-//    StatusService statusService(SystemService systemService, BuildProperties buildProperties) {
-//        return new StatusService(systemService, buildProperties);
-//    }
 }
