@@ -2,7 +2,7 @@ package dev.archie.landscapeservice.integration.system;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.archie.landscapeservice.integration.common.AbstractIntegrationTest;
-import dev.archie.landscapeservice.integration.common.ServiceConstants;
+import dev.archie.landscapeservice.integration.common.TestConstants;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +32,7 @@ public class SystemControllerTest extends AbstractIntegrationTest {
             new TypeReference<>() {
             });
 
-        Map<String, String> expected = Map.of(ServiceConstants.SERVICE_NAME, "OK");
+        Map<String, String> expected = Map.of(TestConstants.SERVICE_NAME, "OK");
         Assertions.assertEquals(expected, response);
     }
 

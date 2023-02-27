@@ -6,7 +6,7 @@ import dev.archie.landscapeservice.StatusServiceGrpc.StatusServiceBlockingStub;
 import dev.archie.landscapeservice.host.StatusService;
 import dev.archie.landscapeservice.host.dto.HostStatusDto;
 import dev.archie.landscapeservice.integration.common.AbstractIntegrationTest;
-import dev.archie.landscapeservice.integration.common.ServiceConstants;
+import dev.archie.landscapeservice.integration.common.TestConstants;
 import io.grpc.Channel;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
@@ -36,22 +36,22 @@ public class HostControllerTest extends AbstractIntegrationTest {
         Channel channelMockRancher = Mockito.mock(Channel.class);
 
         Mockito.when(handymanMock.getVersion(Empty.getDefaultInstance())).thenReturn(
-            ServiceConstants.HANDYMAN_VERSION);
+            TestConstants.HANDYMAN_VERSION);
         Mockito.when(handymanMock.getReadiness(Empty.getDefaultInstance()))
-            .thenReturn(ServiceConstants.HANDYMAN_READINESS);
+            .thenReturn(TestConstants.HANDYMAN_READINESS);
         Mockito.when(handymanMock.getChannel())
             .thenReturn(channelMockHandyman);
         Mockito.when(handymanMock.getChannel().authority())
-            .thenReturn(ServiceConstants.HANDYMAN_HOST);
+            .thenReturn(TestConstants.HANDYMAN_HOST);
 
         Mockito.when(rancherMock.getVersion(Empty.getDefaultInstance()))
-            .thenReturn(ServiceConstants.RANCHER_VERSION);
+            .thenReturn(TestConstants.RANCHER_VERSION);
         Mockito.when(rancherMock.getReadiness(Empty.getDefaultInstance()))
-            .thenReturn(ServiceConstants.RANCHER_READINESS);
+            .thenReturn(TestConstants.RANCHER_READINESS);
         Mockito.when(rancherMock.getChannel())
             .thenReturn(channelMockRancher);
         Mockito.when(rancherMock.getChannel().authority())
-            .thenReturn(ServiceConstants.RANCHER_HOST);
+            .thenReturn(TestConstants.RANCHER_HOST);
 
         statusService.setHandymanServiceStub(handymanMock);
         statusService.setRancherServiceStub(rancherMock);
@@ -66,8 +66,8 @@ public class HostControllerTest extends AbstractIntegrationTest {
             .getContentAsString();
 
         Map<String, HostStatusDto> expected = Map.of(
-            ServiceConstants.HANDYMAN_SERVICE_NAME, ServiceConstants.HANDYMAN_HOST_STATUS,
-            ServiceConstants.RANCHER_SERVICE_NAME, ServiceConstants.RANCHER_HOST_STATUS
+            TestConstants.HANDYMAN_SERVICE_NAME, TestConstants.HANDYMAN_HOST_STATUS,
+            TestConstants.RANCHER_SERVICE_NAME, TestConstants.RANCHER_HOST_STATUS
         );
 
         Map<String, HostStatusDto> actual = objectMapper.readValue(responseJson,

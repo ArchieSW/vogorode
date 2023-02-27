@@ -2,7 +2,7 @@ package dev.archie.rancherservice.integration.system;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.archie.rancherservice.integration.common.AbstractIntegrationTest;
-import dev.archie.rancherservice.integration.common.ServiceConstants;
+import dev.archie.rancherservice.integration.common.TestConstants;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -32,9 +32,9 @@ public class SystemControllerTest extends AbstractIntegrationTest {
             new TypeReference<>() {
             });
 
-        String readiness = response.get(ServiceConstants.SERVICE_NAME);
+        String readiness = response.get(TestConstants.SERVICE_NAME);
         Assertions.assertTrue(
-            Arrays.asList(ServiceConstants.READINESS_VALUES).contains(readiness));
+            Arrays.asList(TestConstants.READINESS_VALUES).contains(readiness));
     }
 
 

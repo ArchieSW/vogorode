@@ -5,7 +5,7 @@ import dev.archie.handymanservice.ReadinessResponse;
 import dev.archie.handymanservice.StatusServiceGrpc.StatusServiceBlockingStub;
 import dev.archie.handymanservice.VersionResponse;
 import dev.archie.handymanservice.integration.common.GrpcAbstractIntegrationTest;
-import dev.archie.handymanservice.integration.common.ServiceConstants;
+import dev.archie.handymanservice.integration.common.TestConstants;
 import java.util.Arrays;
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import org.junit.jupiter.api.Assertions;
@@ -29,7 +29,7 @@ public class StatusServiceTest extends GrpcAbstractIntegrationTest {
     void getReadinessShouldReturnOneOfReadinessStatuses() {
         ReadinessResponse actual = statusServiceStub.getReadiness(Empty.getDefaultInstance());
         Assertions.assertTrue(
-            Arrays.asList(ServiceConstants.READINESS_VALUES).contains(actual.getStatus()));
+            Arrays.asList(TestConstants.READINESS_VALUES).contains(actual.getStatus()));
     }
 
 }

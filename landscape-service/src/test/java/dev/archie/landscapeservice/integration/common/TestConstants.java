@@ -4,7 +4,7 @@ import dev.archie.landscapeservice.ReadinessResponse;
 import dev.archie.landscapeservice.VersionResponse;
 import dev.archie.landscapeservice.host.dto.HostStatusDto;
 
-public class ServiceConstants {
+public class TestConstants {
 
     public static final String HANDYMAN_SERVICE_NAME = "handyman-service";
     public static final String RANCHER_SERVICE_NAME = "rancher-service";
