@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.protobuf.Empty;
 import dev.archie.landscapeservice.StatusServiceGrpc.StatusServiceBlockingStub;
 import dev.archie.landscapeservice.host.StatusService;
-import dev.archie.landscapeservice.host.dto.HostStatusDto;
+import dev.archie.landscapeservice.host.responses.HostStatusResponse;
 import dev.archie.landscapeservice.integration.common.AbstractIntegrationTest;
 import dev.archie.landscapeservice.integration.common.TestConstants;
 import io.grpc.Channel;
@@ -65,12 +65,12 @@ public class HostControllerTest extends AbstractIntegrationTest {
             .getResponse()
             .getContentAsString();
 
-        Map<String, HostStatusDto> expected = Map.of(
+        Map<String, HostStatusResponse> expected = Map.of(
             TestConstants.HANDYMAN_SERVICE_NAME, TestConstants.HANDYMAN_HOST_STATUS,
             TestConstants.RANCHER_SERVICE_NAME, TestConstants.RANCHER_HOST_STATUS
         );
 
-        Map<String, HostStatusDto> actual = objectMapper.readValue(responseJson,
+        Map<String, HostStatusResponse> actual = objectMapper.readValue(responseJson,
             new TypeReference<>() {
             });
 

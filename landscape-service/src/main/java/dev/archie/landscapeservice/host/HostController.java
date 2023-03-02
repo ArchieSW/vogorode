@@ -1,6 +1,6 @@
 package dev.archie.landscapeservice.host;
 
-import dev.archie.landscapeservice.host.dto.HostStatusDto;
+import dev.archie.landscapeservice.host.responses.HostStatusResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,7 @@ public class HostController {
      * @return Map with client name as key and build info as value
      */
     @GetMapping("/statuses")
-    public Map<String, HostStatusDto> getStatuses() {
+    public Map<String, HostStatusResponse> getStatuses() {
         return statusService.getStatuses();
     }
 

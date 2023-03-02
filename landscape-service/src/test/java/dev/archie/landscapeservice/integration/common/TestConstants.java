@@ -2,7 +2,7 @@ package dev.archie.landscapeservice.integration.common;
 
 import dev.archie.landscapeservice.ReadinessResponse;
 import dev.archie.landscapeservice.VersionResponse;
-import dev.archie.landscapeservice.host.dto.HostStatusDto;
+import dev.archie.landscapeservice.host.responses.HostStatusResponse;
 
 public class TestConstants {
 
@@ -20,7 +20,7 @@ public class TestConstants {
     public static final ReadinessResponse HANDYMAN_READINESS = ReadinessResponse.newBuilder()
         .setStatus("READY")
         .build();
-    public static final HostStatusDto HANDYMAN_HOST_STATUS = HostStatusDto.builder()
+    public static final HostStatusResponse HANDYMAN_HOST_STATUS = HostStatusResponse.builder()
         .status(HANDYMAN_READINESS.getStatus())
         .host(HANDYMAN_HOST)
         .group(HANDYMAN_VERSION.getGroup())
@@ -38,7 +38,7 @@ public class TestConstants {
         .setStatus("IDLE")
         .build();
     public static final String RANCHER_HOST = "localhost:9091";
-    public static final HostStatusDto RANCHER_HOST_STATUS = HostStatusDto.builder()
+    public static final HostStatusResponse RANCHER_HOST_STATUS = HostStatusResponse.builder()
         .status(RANCHER_READINESS.getStatus())
         .host(RANCHER_HOST)
         .group(RANCHER_VERSION.getGroup())

@@ -4,7 +4,7 @@ import com.google.protobuf.Empty;
 import dev.archie.landscapeservice.ReadinessResponse;
 import dev.archie.landscapeservice.StatusServiceGrpc.StatusServiceBlockingStub;
 import dev.archie.landscapeservice.VersionResponse;
-import dev.archie.landscapeservice.host.dto.HostStatusDto;
+import dev.archie.landscapeservice.host.responses.HostStatusResponse;
 import java.util.Map;
 import lombok.Setter;
 import net.devh.boot.grpc.client.inject.GrpcClient;
@@ -27,19 +27,19 @@ public class StatusService {
      *
      * @return Map with client name as key and build info as value
      */
-    public Map<String, HostStatusDto> getStatuses() {
-        HostStatusDto handymanStatus = getHostStatus(HANDYMAN_SERVICE_NAME, handymanServiceStub);
-        HostStatusDto rancherStatus = getHostStatus(RANCHER_SERVICE_NAME, rancherServiceStub);
+    public Map<String, HostStatusResponse> getStatuses() {
+        HostStatusResponse handymanStatus = getHostStatus(HANDYMAN_SERVICE_NAME, handymanServiceStub);
+        HostStatusResponse rancherStatus = getHostStatus(RANCHER_SERVICE_NAME, rancherServiceStub);
         return Map.of(
             HANDYMAN_SERVICE_NAME, handymanStatus,
             RANCHER_SERVICE_NAME, rancherStatus
         );
     }
 
-    private HostStatusDto getHostStatus(String serviceName, StatusServiceBlockingStub service) {
+    private HostStatusResponse getHostStatus(String serviceName, StatusServiceBlockingStub service) {
         VersionResponse buildInfo = service.getVersion(Empty.getDefaultInstance());
         ReadinessResponse readiness = service.getReadiness(Empty.getDefaultInstance());
-        return HostStatusDto.builder()
+        return HostStatusResponse.builder()
             .version(buildInfo.getVersion())
             .status(readiness.getStatus())
             .group(buildInfo.getGroup())

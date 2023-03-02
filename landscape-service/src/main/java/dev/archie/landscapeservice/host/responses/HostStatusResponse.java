@@ -1,4 +1,4 @@
-package dev.archie.landscapeservice.host.dto;
+package dev.archie.landscapeservice.host.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class HostStatusDto {
+public class HostStatusResponse {
 
     private String host;
     private String status;
