@@ -7,4 +7,4 @@ docker-compose up
 ```
 
 ## Лог домашних заданий:
- - [ ] [ДЗ 1](./docs/hw1.md)
+ - [X] [ДЗ 1](./docs/hw1.md)
