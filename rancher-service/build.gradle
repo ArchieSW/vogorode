@@ -56,7 +56,6 @@ protobuf {
     }
 }
 
-
 ext {
     set('testcontainersVersion', "1.17.6")
 }
@@ -83,7 +82,6 @@ dependencies {
     testImplementation "io.grpc:grpc-testing:${grpcVersion}"
     implementation 'org.springframework.boot:spring-boot-starter'
     implementation 'net.devh:grpc-spring-boot-starter:2.14.0.RELEASE'
-
 }
 
 dependencyManagement {
