@@ -1,0 +1,30 @@
+version: "3.9"
+
+networks:
+  app-tier:
+    driver: bridge
+
+services:
+  handyman-service:
+    container_name: handyman-service
+    build: ./handyman-service
+    ports:
+      - "8080:8080"
+    networks:
+        - app-tier
+  
+  landscape-service:
+    container_name: landscape-service
+    build: ./landscape-service
+    ports:
+      - "8081:8081"
+    networks:
+        - app-tier
+
+  rancher-service:
+    container_name: rancher-service
+    build: ./rancher-service
+    ports:
+      - "8082:8082"
+    networks:
+        - app-tier
