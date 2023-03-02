@@ -20,7 +20,7 @@ public class HostController {
      * @return Map with client name as key and build info as value
      */
     @GetMapping("/statuses")
-    public Map<String, HostStatusResponse> getStatuses() {
+    public Map<String, HostStatusResponse[]> getStatuses() {
         return statusService.getStatuses();
     }
 

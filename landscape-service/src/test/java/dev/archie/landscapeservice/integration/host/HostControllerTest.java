@@ -8,6 +8,7 @@ import dev.archie.landscapeservice.host.responses.HostStatusResponse;
 import dev.archie.landscapeservice.integration.common.AbstractIntegrationTest;
 import dev.archie.landscapeservice.integration.common.TestConstants;
 import io.grpc.Channel;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,12 +66,14 @@ public class HostControllerTest extends AbstractIntegrationTest {
             .getResponse()
             .getContentAsString();
 
-        Map<String, HostStatusResponse> expected = Map.of(
-            TestConstants.HANDYMAN_SERVICE_NAME, TestConstants.HANDYMAN_HOST_STATUS,
-            TestConstants.RANCHER_SERVICE_NAME, TestConstants.RANCHER_HOST_STATUS
+        Map<String, List<HostStatusResponse>> expected = Map.of(
+            TestConstants.HANDYMAN_SERVICE_NAME,
+            List.of(TestConstants.HANDYMAN_HOST_STATUS),
+            TestConstants.RANCHER_SERVICE_NAME,
+            List.of(TestConstants.RANCHER_HOST_STATUS)
         );
 
-        Map<String, HostStatusResponse> actual = objectMapper.readValue(responseJson,
+        Map<String, List<HostStatusResponse>> actual = objectMapper.readValue(responseJson,
             new TypeReference<>() {
             });
 

@@ -27,16 +27,18 @@ public class StatusService {
      *
      * @return Map with client name as key and build info as value
      */
-    public Map<String, HostStatusResponse> getStatuses() {
-        HostStatusResponse handymanStatus = getHostStatus(HANDYMAN_SERVICE_NAME, handymanServiceStub);
+    public Map<String, HostStatusResponse[]> getStatuses() {
+        HostStatusResponse handymanStatus = getHostStatus(HANDYMAN_SERVICE_NAME,
+            handymanServiceStub);
         HostStatusResponse rancherStatus = getHostStatus(RANCHER_SERVICE_NAME, rancherServiceStub);
         return Map.of(
-            HANDYMAN_SERVICE_NAME, handymanStatus,
-            RANCHER_SERVICE_NAME, rancherStatus
+            HANDYMAN_SERVICE_NAME, new HostStatusResponse[]{handymanStatus},
+            RANCHER_SERVICE_NAME, new HostStatusResponse[]{rancherStatus}
         );
     }
 
-    private HostStatusResponse getHostStatus(String serviceName, StatusServiceBlockingStub service) {
+    private HostStatusResponse getHostStatus(String serviceName,
+        StatusServiceBlockingStub service) {
         VersionResponse buildInfo = service.getVersion(Empty.getDefaultInstance());
         ReadinessResponse readiness = service.getReadiness(Empty.getDefaultInstance());
         return HostStatusResponse.builder()
