@@ -7,7 +7,6 @@ import dev.archie.rancherservice.VersionResponse;
 import io.grpc.stub.StreamObserver;
 import lombok.RequiredArgsConstructor;
 import net.devh.boot.grpc.server.service.GrpcService;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.info.BuildProperties;
 
 @GrpcService
@@ -16,8 +15,6 @@ public class StatusService extends StatusServiceImplBase {
 
     private final BuildProperties buildProperties;
     private final SystemService systemService;
-    @Value("${spring.application.name}")
-    private String serviceName;
 
     /**
      * <b>getVersion</b> used to get service build information
@@ -46,7 +43,7 @@ public class StatusService extends StatusServiceImplBase {
     @Override
     public void getReadiness(Empty request, StreamObserver<ReadinessResponse> responseObserver) {
         ReadinessResponse ok = ReadinessResponse.newBuilder()
-            .setStatus(systemService.getReadiness().get(serviceName))
+            .setStatus(systemService.getReadiness().getValue())
             .build();
         responseObserver.onNext(ok);
         responseObserver.onCompleted();
