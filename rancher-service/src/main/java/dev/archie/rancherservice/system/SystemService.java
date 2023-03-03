@@ -1,24 +1,35 @@
 package dev.archie.rancherservice.system;
 
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
+import java.util.Map.Entry;
+import net.devh.boot.grpc.server.config.GrpcServerProperties;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class SystemService {
 
+    private final ManagedChannel channel;
     @Value("${spring.application.name}")
     private String serviceName;
+
+    public SystemService(GrpcServerProperties grpcProperties) {
+        this.channel = ManagedChannelBuilder
+            .forAddress(grpcProperties.getAddress(), grpcProperties.getPort())
+            .usePlaintext()
+            .build();
+    }
 
     /**
      * Returns whether the service is ready to accept requests.
      *
      * @return { <b><i>SERVICE_NAME</i></b> : "OK" }
      */
-    public Map<String, String> getReadiness() {
-        return Map.of(serviceName, "OK");
+    public Entry<String, String> getReadiness() {
+        String name = channel.getState(channel.isShutdown()).name();
+        return Map.entry(serviceName, name);
     }
 
 }

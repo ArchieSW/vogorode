@@ -8,3 +8,4 @@ docker-compose up
 
 ## Лог домашних заданий:
  - [X] [ДЗ 1](./docs/hw1.md)
+ - [X] [ДЗ 2](./docs/hw2.md)

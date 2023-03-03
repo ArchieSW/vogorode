@@ -10,8 +10,11 @@ services:
     build: ./handyman-service
     ports:
       - "8080:8080"
+      - "9090:9090"
     networks:
         - app-tier
+    environment:
+      - SERVICE_ADDRESS=0.0.0.0
   
   landscape-service:
     container_name: landscape-service
@@ -20,11 +23,17 @@ services:
       - "8081:8081"
     networks:
         - app-tier
+    environment:
+      - HANDYMAN_ADDRESS=static://handyman-service:9090
+      - RANCHER_ADDRESS=static://rancher-service:9091
 
   rancher-service:
     container_name: rancher-service
     build: ./rancher-service
     ports:
       - "8082:8082"
+      - "9091:9091"
     networks:
         - app-tier
+    environment:
+      - SERVICE_ADDRESS=0.0.0.0
