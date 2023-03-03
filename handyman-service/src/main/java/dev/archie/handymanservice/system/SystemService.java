@@ -5,6 +5,7 @@ import io.grpc.ManagedChannelBuilder;
 import java.util.Map;
 import java.util.Map.Entry;
 import net.devh.boot.grpc.server.config.GrpcServerProperties;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
