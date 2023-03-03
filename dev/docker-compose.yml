@@ -7,7 +7,7 @@ networks:
 services:
   handyman-service:
     container_name: handyman-service
-    build: ./handyman-service
+    build: ../handyman-service
     ports:
       - "8080:8080"
       - "9090:9090"
@@ -18,7 +18,7 @@ services:
   
   landscape-service:
     container_name: landscape-service
-    build: ./landscape-service
+    build: ../landscape-service
     ports:
       - "8081:8081"
     networks:
@@ -29,7 +29,7 @@ services:
 
   rancher-service:
     container_name: rancher-service
-    build: ./rancher-service
+    build: ../rancher-service
     ports:
       - "8082:8082"
       - "9091:9091"
@@ -37,3 +37,32 @@ services:
         - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
+
+  postgres:
+    image: postgres:15.2-alpine3.17
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql/
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_DB=postgres
+    networks:
+        - app-tier
+
+  prometheus:
+    image: bitnami/prometheus:2.42.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus-data:/opt/bitnami/prometheus/data
+    networks:
+        - app-tier
+
+  grafana:
+    image: grafana/grafana-oss:9.4.3
+    container_name: grafana
+    ports:
+      - "3000:3000"
+
