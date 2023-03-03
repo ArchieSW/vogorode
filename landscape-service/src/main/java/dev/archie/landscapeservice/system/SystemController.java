@@ -1,6 +1,6 @@
 package dev.archie.landscapeservice.system;
 
-import java.util.Map;
+import java.util.Map.Entry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +26,7 @@ public class SystemController {
      * @return { <b><i>SERVICE_NAME</i></b> : "OK" }
      */
     @GetMapping("/readiness")
-    public Map<String, String> getReadiness() {
+    public Entry<String, String> getReadiness() {
         return systemService.getReadiness();
     }
 

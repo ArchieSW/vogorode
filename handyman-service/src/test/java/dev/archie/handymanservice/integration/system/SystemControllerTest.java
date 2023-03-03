@@ -2,10 +2,10 @@ package dev.archie.handymanservice.integration.system;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import dev.archie.handymanservice.integration.common.AbstractIntegrationTest;
-import dev.archie.handymanservice.integration.common.ServiceConstants;
+import dev.archie.handymanservice.integration.common.TestConstants;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +21,7 @@ public class SystemControllerTest extends AbstractIntegrationTest {
     private MockMvc mockMvc;
 
     @Test
-    void getReadinessShouldReturnServiceNameAndOk() throws Exception {
+    void getReadinessShouldReturnOneOfReadinessStatuses() throws Exception {
         String responseSerialized = mockMvc.perform(MockMvcRequestBuilders.get("/system/readiness"))
             .andExpect(MockMvcResultMatchers.status().isOk())
             .andReturn()
@@ -32,8 +32,9 @@ public class SystemControllerTest extends AbstractIntegrationTest {
             new TypeReference<>() {
             });
 
-        Map<String, String> expected = Map.of(ServiceConstants.SERVICE_NAME, "OK");
-        Assertions.assertEquals(expected, response);
+        String readiness = response.get(TestConstants.SERVICE_NAME);
+        Assertions.assertTrue(
+            Arrays.asList(TestConstants.READINESS_VALUES).contains(readiness));
     }
 
 

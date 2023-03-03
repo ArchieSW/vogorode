@@ -1,12 +1,11 @@
 package dev.archie.landscapeservice.system;
 
 import java.util.Map;
-import lombok.RequiredArgsConstructor;
+import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 public class SystemService {
 
     @Value("${spring.application.name}")
@@ -17,8 +16,8 @@ public class SystemService {
      *
      * @return { <b><i>SERVICE_NAME</i></b> : "OK" }
      */
-    public Map<String, String> getReadiness() {
-        return Map.of(serviceName, "OK");
+    public Entry<String, String> getReadiness() {
+        return Map.entry(serviceName, "OK");
     }
 
 }
