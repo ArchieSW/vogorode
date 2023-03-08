@@ -34,22 +34,24 @@ spec:
       containers:
       - name:  landscape
         image:  devarchie/landscape:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         env:
         - name: HANDYMAN_ADDRESS
           value: static://handyman:9090
         - name: RANCHER_ADDRESS
           value: static://rancher:9091
+        - name: DB_URL
+          value: jdbc:postgresql://postgres:5432/postgres?currentSchema=public
         - name: DB_USERNAME
           valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: user
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_USER
         - name: DB_PASSWORD
           valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: password
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_PASSWORD
         livenessProbe:
           httpGet:
             path: /system/liveness

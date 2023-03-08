@@ -1,7 +1,5 @@
 minikube kubectl -- apply -f secret.yml
 minikube kubectl -- apply -f local-storage.yml
-minikube kubectl -- apply -f postgre-pv.yml
-minikube kubectl -- apply -f postgre-pvc.yml
 minikube kubectl -- apply -f postgre-deployment.yml
 
 minikube kubectl -- apply -f handyman-deployment.yml

@@ -26,7 +26,7 @@ spec:
   selector:
     matchLabels:
       app: handyman
-  replicas: 1
+  replicas: 3
   template:
     metadata:
       labels:
@@ -35,7 +35,7 @@ spec:
       containers:
       - name:  handyman
         image:  devarchie/handyman:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         livenessProbe:
           httpGet:
             path: /system/liveness
@@ -55,14 +55,14 @@ spec:
           value: jdbc:postgresql://postgres:5432/postgres?currentSchema=public
         - name: DB_USERNAME
           valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: user
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_USER
         - name: DB_PASSWORD
           valueFrom:
-            secretKeyRef:
-              name: postgres-secret
-              key: password
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_PASSWORD
         ports:
         - containerPort:  8080
           name:  handyman-rest
