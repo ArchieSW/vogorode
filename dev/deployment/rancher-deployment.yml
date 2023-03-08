@@ -32,6 +32,10 @@ spec:
       labels:
         app:  rancher
     spec:
+      initContainers:
+      - name: init-wait
+        image: alpine
+        command: ["sh", "-c", "for i in $(seq 1 300); do nc -zvw1 postgres 5432 && exit 0 || sleep 3; done; exit 1"]
       containers:
       - name:  rancher
         image:  devarchie/rancher:latest
@@ -40,13 +44,13 @@ spec:
           httpGet:
             path: /system/liveness
             port: 8082
-          initialDelaySeconds: 40
+          initialDelaySeconds: 100
           periodSeconds: 3
         readinessProbe:
           httpGet:
             path: /system/readiness
             port: 8082
-          initialDelaySeconds: 40
+          initialDelaySeconds: 100
           periodSeconds: 3
         env:
         - name: SERVICE_ADDRESS
