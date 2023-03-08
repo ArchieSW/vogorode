@@ -15,6 +15,9 @@ services:
         - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
+      - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123
   
   landscape-service:
     container_name: landscape-service
@@ -26,6 +29,9 @@ services:
     environment:
       - HANDYMAN_ADDRESS=static://handyman-service:9090
       - RANCHER_ADDRESS=static://rancher-service:9091
+      - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123
 
   rancher-service:
     container_name: rancher-service
@@ -37,6 +43,9 @@ services:
         - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
+      - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=123
 
   postgres:
     image: postgres:15.2-alpine3.17

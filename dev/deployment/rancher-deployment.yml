@@ -1,0 +1,69 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: rancher
+spec:
+  selector:
+    app: rancher
+  ports:
+  - protocol: TCP
+    port: 8082
+    name: rancher-rest
+  - protocol: TCP
+    port: 9091
+    name: rancher-grpc
+  type: ClusterIP
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  rancher
+  namespace: default
+  labels:
+    app:  rancher
+spec:
+  selector:
+    matchLabels:
+      app: rancher
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  rancher
+    spec:
+      containers:
+      - name:  rancher
+        image:  devarchie/rancher:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /system/liveness
+            port: 8082
+          initialDelaySeconds: 40
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /system/readiness
+            port: 8082
+          initialDelaySeconds: 40
+          periodSeconds: 3
+        env:
+        - name: SERVICE_ADDRESS
+          value: 0.0.0.0
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        ports:
+        - containerPort:  8082
+          name: rancher-rest
+        - containerPort: 9091
+          name: rancher-grpc
+      # restartPolicy: Always

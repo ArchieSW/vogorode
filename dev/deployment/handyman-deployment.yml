@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: handyman 
+  namespace: default
+spec:
+  selector:
+    app: handyman 
+  type: ClusterIP
+  ports:
+  - name: handyman-rest
+    protocol: TCP
+    port: 8080
+  - name: handyman-grpc
+    protocol: TCP
+    port: 9090
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  handyman
+  namespace: default
+  labels:
+    app:  handyman
+spec:
+  selector:
+    matchLabels:
+      app: handyman
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  handyman
+    spec:
+      containers:
+      - name:  handyman
+        image:  devarchie/handyman:latest
+        imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /system/liveness
+            port: 8080
+          initialDelaySeconds: 40
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /system/readiness
+            port: 8080
+          initialDelaySeconds: 40
+          periodSeconds: 3
+        env:
+        - name: SERVICE_ADDRESS
+          value: 0.0.0.0
+        - name: DB_URL
+          value: jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+        - name: DB_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: user
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: postgres-secret
+              key: password
+        ports:
+        - containerPort:  8080
+          name:  handyman-rest
+        - containerPort: 9090
+          name: handyman-grpc
+      restartPolicy: Always

@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name:  postgres
+  namespace: default
+  labels:
+    app:  postgres
+spec:
+  selector:
+    matchLabels:
+      app: postgres
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app:  postgres
+    spec:
+      containers:
+      - name:  postgres
+        image:  postgres:15.2-alpine3.17
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        env:
+          - name: POSTGRES_USER
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: user
+          - name: POSTGRES_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres-secret
+                key: password
+          - name: POSTGRES_DB
+            value: postgres
+        ports:
+        - containerPort:  5432
+          name:  postgres
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-persistent-storage
+      volumes:
+      - name: postgres-persistent-storage
+        persistentVolumeClaim:
+          claimName: postgre-pvc
+      restartPolicy: Always
