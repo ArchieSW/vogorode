@@ -18,6 +18,8 @@ services:
       - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
       - DB_USERNAME=postgres
       - DB_PASSWORD=123
+    depends_on:
+      - postgres
   
   landscape-service:
     container_name: landscape-service
@@ -32,6 +34,8 @@ services:
       - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
       - DB_USERNAME=postgres
       - DB_PASSWORD=123
+    depends_on:
+      - postgres
 
   rancher-service:
     container_name: rancher-service
@@ -46,6 +50,8 @@ services:
       - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
       - DB_USERNAME=postgres
       - DB_PASSWORD=123
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:15.2-alpine3.17
