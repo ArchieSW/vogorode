@@ -15,6 +15,8 @@ services:
         - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
+    depends_on:
+      - postgres
   
   landscape-service:
     container_name: landscape-service
@@ -26,6 +28,8 @@ services:
     environment:
       - HANDYMAN_ADDRESS=static://handyman-service:9090
       - RANCHER_ADDRESS=static://rancher-service:9091
+    depends_on:
+      - postgres
 
   rancher-service:
     container_name: rancher-service
@@ -37,6 +41,8 @@ services:
         - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
+    depends_on:
+      - postgres
 
   postgres:
     image: postgres:15.2-alpine3.17
