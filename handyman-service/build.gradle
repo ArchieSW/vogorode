@@ -18,7 +18,7 @@ plugins {
 }
 
 group = 'dev.archie'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.2-SNAPSHOT'
 sourceCompatibility = '17'
 
 springBoot {
@@ -62,11 +62,9 @@ ext {
     set('testcontainersVersion', "1.17.6")
 }
 
-jar {
-    enabled = false
-}
-
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    runtimeOnly 'org.postgresql:postgresql'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'io.micrometer:micrometer-registry-prometheus'
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
