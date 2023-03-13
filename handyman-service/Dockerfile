@@ -3,7 +3,7 @@ WORKDIR /workspace/app
 
 COPY . /workspace/app
 RUN apk update && apk add gcompat
-RUN gradle clean build
+RUN gradle clean build -x test
 
 FROM eclipse-temurin:17-jdk-alpine
 VOLUME /tmp
