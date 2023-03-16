@@ -11,3 +11,4 @@ docker-compose up
  - [X] [ДЗ 2](./docs/hw2.md)
  - [X] [ДЗ 3](./docs/hw3.md), [инструкция](./dev/readme.md) по запуску
  - [X] [ДЗ 4](./docs/hw4.md), [демонстрация](https://youtu.be/fPgS9zNuPUo)
+ - [X] [ДЗ 5](./docs/hw5.md)
