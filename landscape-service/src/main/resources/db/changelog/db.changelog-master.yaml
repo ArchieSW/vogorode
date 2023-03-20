@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - include:
+      file: db/hw5/2023-03-15--01-create-user-table.sql
+  - include:
+      file: db/hw5/2023-03-15--02-alter-user-table.sql
+  - changeSet:
+      id: 3
+      author: dkutuzov
+      changes:
+        - sqlFile:
+            dbms: postgresql
+            splitStatements: false
+            path: db/hw5/2023-03-15--03-procedure-update-user-type.sql
