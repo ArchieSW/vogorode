@@ -6,11 +6,12 @@ metadata:
 spec:
   selector:
     app: handyman 
-  type: ClusterIP
+  type: LoadBalancer
   ports:
   - name: handyman-rest
     protocol: TCP
     port: 8080
+    nodePort: 30002
   - name: handyman-grpc
     protocol: TCP
     port: 9090
@@ -55,18 +56,10 @@ spec:
         env:
         - name: SERVICE_ADDRESS
           value: 0.0.0.0
-        - name: DB_URL
-          value: jdbc:postgresql://postgres:5432/postgres?currentSchema=public
-        - name: DB_USERNAME
-          valueFrom:
-            configMapKeyRef:
-              name: postgres-config
-              key: POSTGRES_USER
-        - name: DB_PASSWORD
-          valueFrom:
-            configMapKeyRef:
-              name: postgres-config
-              key: POSTGRES_PASSWORD
+        - name: MONGO_DB_URI
+          value: mongodb://mongo:27017/handyman
+        - name: LANDSCAPE_REST_URL
+          value: http://landscape:8081/
         ports:
         - containerPort:  8080
           name:  handyman-rest
