@@ -41,14 +41,6 @@ public class UserController {
     }
 
     /**
-     * @return all existing users
-     */
-    @GetMapping
-    public List<User> getAll() {
-        return userService.getAll();
-    }
-
-    /**
      * @param id of existing user
      * @param creatingUserDto new fields for user. New email should not exist
      * @return updated user

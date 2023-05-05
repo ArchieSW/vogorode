@@ -48,13 +48,6 @@ public class UserService {
     }
 
     /**
-     * @return all existing users
-     */
-    public List<User> getAll() {
-        return userRepository.findAll();
-    }
-
-    /**
      * @param id of existing user
      * @param creatingUserDto new fields for user. New email should not exist
      * @return updated user

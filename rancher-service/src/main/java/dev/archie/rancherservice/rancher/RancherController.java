@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/ranchers")
@@ -36,14 +34,6 @@ public class RancherController {
     @GetMapping("/{id}")
     public Profile getById(@PathVariable String id) {
         return rancherService.getProfileById(id);
-    }
-
-    /**
-     * @return all existing profiles
-     */
-    @GetMapping
-    public List<Plot> getAll() {
-        return rancherService.getAll();
     }
 
     /**

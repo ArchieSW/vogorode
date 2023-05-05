@@ -8,8 +8,6 @@ import dev.archie.handymanservice.landscape.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class HandymanService {
@@ -50,13 +48,6 @@ public class HandymanService {
     public Handyman getById(String id) {
         return handymanRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserException(id));
-    }
-
-    /**
-     * @return existing handyman profiles
-     */
-    public List<Handyman> getAll() {
-        return handymanRepository.findAll();
     }
 
     /**

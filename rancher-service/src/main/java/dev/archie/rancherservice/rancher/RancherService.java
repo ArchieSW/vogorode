@@ -8,8 +8,6 @@ import dev.archie.rancherservice.rancher.exception.NoSuchUserException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class RancherService {
@@ -50,13 +48,6 @@ public class RancherService {
     public Plot getPlotById(String id) {
         return rancherRepository.findById(id)
                 .orElseThrow(() -> new NoSuchUserException(id));
-    }
-
-    /**
-     * @return all existing profiles
-     */
-    public List<Plot> getAll() {
-        return rancherRepository.findAll();
     }
 
     /**

@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/handymen")
@@ -36,14 +34,6 @@ public class HandymanController {
     @GetMapping("/{id}")
     public Profile getById(@PathVariable String id) {
         return handymanService.getProfileById(id);
-    }
-
-    /**
-     * @return existing handyman profiles
-     */
-    @GetMapping
-    public List<Handyman> getAll() {
-        return handymanService.getAll();
     }
 
     /**
