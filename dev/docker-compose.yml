@@ -49,17 +49,20 @@ services:
       - SERVICE_ADDRESS=0.0.0.0
       - MONGO_DB_URI=mongodb://mongo:27017/rancher
       - LANDSCAPE_REST_URL=http://landscape-service:8081/
+      - PG_DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+      - PG_DB_USERNAME=postgres
+      - PG_DB_PASSWORD=123
     depends_on:
       - landscape-service
       - mongo
 
   postgres:
-    image: postgres:15.2
+    image: postgis/postgis:15-3.3
     container_name: postgres
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres-data:/var/lib/postgresql/
+      - ./postgres_data:/var/lib/postgresql/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123
@@ -88,29 +91,6 @@ services:
       - app-tier
     depends_on:
       - mongo
-
-  mongo:
-    image: mongo
-    ports:
-      - 27017:27017
-    volumes:
-      - ./mongo_data/:/data/db
-    networks:
-      - app-tier
-
-  mongo-express:
-    image: mongo-express
-    ports:
-      - 8085:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
-    networks:
-      - app-tier
-    depends_on:
-      - mongo
-
 
   prometheus:
     image: bitnami/prometheus:2.42.0

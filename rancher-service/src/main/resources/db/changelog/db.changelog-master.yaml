@@ -1,7 +1,5 @@
 databaseChangeLog:
-  - changeSet:
-      id: 1
-      author: dkutuzov
-      changes:
-        - createCollection:
-            collectionName: users
+  - include:
+      file: db/hw8/2023-05-06--01-create-gardener-table.sql
+  - include:
+      file: db/hw8/2023-05-06--02-create-field-table.sql
