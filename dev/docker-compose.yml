@@ -34,7 +34,7 @@ services:
     environment:
       - HANDYMAN_ADDRESS=static://handyman-service:9090
       - RANCHER_ADDRESS=static://rancher-service:9091
-      - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+      - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
       - DB_USERNAME=postgres
       - DB_PASSWORD=123
     depends_on:
@@ -52,7 +52,7 @@ services:
       - SERVICE_ADDRESS=0.0.0.0
       - MONGO_DB_URI=mongodb://mongo:27017/rancher
       - LANDSCAPE_REST_URL=http://landscape-service:8081/
-      - PG_DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+      - PG_DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
       - PG_DB_USERNAME=postgres
       - PG_DB_PASSWORD=123
     depends_on:
