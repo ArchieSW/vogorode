@@ -14,3 +14,4 @@ cd dev && docker-compose up
  - [X] [ДЗ 5](./docs/hw5.md)
  - [X] [ДЗ 6](./docs/hw6.md), [демонстрация](https://youtu.be/zjggYWk7v1Y)
  - [X] [ДЗ 7](./docs/hw7.md)
+ - [X] [ДЗ 8](./docs/hw8.md)
