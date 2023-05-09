@@ -61,6 +61,18 @@ spec:
           value: mongodb://mongo:27017/handyman
         - name: LANDSCAPE_REST_URL
           value: http://landscape:8081/
+        - name: PG_DB_URL
+          value: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
+        - name: PG_DB_USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_USER
+        - name: PG_DB_PASSWORD
+          valueFrom:
+            configMapKeyRef:
+              name: postgres-config
+              key: POSTGRES_PASSWORD
         ports:
         - containerPort:  8082
           name: rancher-rest
