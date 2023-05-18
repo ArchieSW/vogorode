@@ -1,0 +1,5 @@
+/dev/grafana_data/
+/dev/mongo_data/
+/dev/postgres-data/
+/dev/prometheus_data/
+/.idea/

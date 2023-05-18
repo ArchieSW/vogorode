@@ -12,7 +12,7 @@ services:
       - "8080:8080"
       - "9090:9090"
     networks:
-        - app-tier
+      - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
       - MONGO_DB_URI=mongodb://mongo:27017/handyman
@@ -27,7 +27,7 @@ services:
     ports:
       - "8081:8081"
     networks:
-        - app-tier
+      - app-tier
     environment:
       - HANDYMAN_ADDRESS=static://handyman-service:9090
       - RANCHER_ADDRESS=static://rancher-service:9091
@@ -44,7 +44,7 @@ services:
       - "8082:8082"
       - "9091:9091"
     networks:
-        - app-tier
+      - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
       - MONGO_DB_URI=mongodb://mongo:27017/rancher
@@ -65,7 +65,29 @@ services:
       - POSTGRES_PASSWORD=123
       - POSTGRES_DB=postgres
     networks:
-        - app-tier
+      - app-tier
+
+  mongo:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo_data/:/data/db
+    networks:
+      - app-tier
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8085:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://mongo:27017/
+    networks:
+      - app-tier
+    depends_on:
+      - mongo
 
   mongo:
     image: mongo
@@ -93,14 +115,30 @@ services:
   prometheus:
     image: bitnami/prometheus:2.42.0
     container_name: prometheus
+    ports:
+      - "1000:1000"
+    command:
+      - --web.listen-address=:10000
+      - --storage.tsdb.path=/prometheus
+      - --config.file=/etc/prometheus/prometheus.yml
     volumes:
-      - ./prometheus-data:/opt/bitnami/prometheus/data
+      - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_data:/opt/bitnami/prometheus/data
     networks:
-        - app-tier
+      - app-tier
 
   grafana:
-    image: grafana/grafana-oss:9.4.3
+    image: bitnami/grafana:9.4.3
     container_name: grafana
     ports:
       - "3000:3000"
-
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECUTIRY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana_data:/opt/bitnami/grafana/data
+      - ../monitoring/grafana/provisioning:/opt/bitnami/grafana/conf/provisioning
+    networks:
+      - app-tier
+    depends_on:
+      - prometheus
