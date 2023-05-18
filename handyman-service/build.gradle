@@ -19,7 +19,7 @@ plugins {
 }
 
 group = 'dev.archie'
-version = '0.7.0'
+version = '0.8.0'
 sourceCompatibility = '17'
 
 springBoot {
@@ -104,13 +104,4 @@ dependencyManagement {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-liquibase {
-    activities {
-        main {
-            changelogFile "src/main/resources/db/changelog/db.changelog-master.yml"
-            url "mongodb://localhost:27017/handyman"
-        }
-    }
 }
