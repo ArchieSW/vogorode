@@ -1,0 +1,11 @@
+global:
+  scrape_interval: 1m
+
+scrape_configs:
+  - job_name: 'vogorode'
+    scrape_interval: 5s
+    metrics_path: '/metrics'
+    static_configs:
+      - targets: ['handyman-service:8080']
+      - targets: ['landscape-service:8081']
+      - targets: ['rancher-service:8082']

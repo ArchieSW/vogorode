@@ -13,3 +13,5 @@ databaseChangeLog:
             path: db/hw5/2023-03-15--03-procedure-update-user-type.sql
   - include:
       file: db/hw5/2023-04-06--04-add-coordinates.sql
+  - include:
+      file: db/hw8/2023-05-09--05-add-order-table.sql

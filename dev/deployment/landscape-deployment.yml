@@ -45,7 +45,7 @@ spec:
         - name: RANCHER_ADDRESS
           value: static://rancher:9091
         - name: DB_URL
-          value: jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+          value: jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
         - name: DB_USERNAME
           valueFrom:
             configMapKeyRef:

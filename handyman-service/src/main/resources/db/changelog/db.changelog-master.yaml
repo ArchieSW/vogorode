@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+     file: db/hw8/2023-05-07--01-create-user-table.sql
+  - include:
+      file: db/hw8/2023-05-07--02-create-account-table.sql

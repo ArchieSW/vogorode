@@ -12,13 +12,15 @@ services:
       - "8080:8080"
       - "9090:9090"
     networks:
-        - app-tier
+      - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
       - MONGO_DB_URI=mongodb://mongo:27017/handyman
       - LANDSCAPE_REST_URL=http://landscape-service:8081/
+      - PG_DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
+      - PG_DB_USERNAME=postgres
+      - PG_DB_PASSWORD=123
     depends_on:
-      - landscape-service
       - mongo
 
   landscape-service:
@@ -27,14 +29,16 @@ services:
     ports:
       - "8081:8081"
     networks:
-        - app-tier
+      - app-tier
     environment:
       - HANDYMAN_ADDRESS=static://handyman-service:9090
       - RANCHER_ADDRESS=static://rancher-service:9091
-      - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public
+      - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
       - DB_USERNAME=postgres
       - DB_PASSWORD=123
     depends_on:
+      - rancher-service
+      - handyman-service
       - postgres
 
   rancher-service:
@@ -44,28 +48,30 @@ services:
       - "8082:8082"
       - "9091:9091"
     networks:
-        - app-tier
+      - app-tier
     environment:
       - SERVICE_ADDRESS=0.0.0.0
       - MONGO_DB_URI=mongodb://mongo:27017/rancher
       - LANDSCAPE_REST_URL=http://landscape-service:8081/
+      - PG_DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
+      - PG_DB_USERNAME=postgres
+      - PG_DB_PASSWORD=123
     depends_on:
-      - landscape-service
       - mongo
 
   postgres:
-    image: postgres:15.2
+    image: postgis/postgis:15-3.3
     container_name: postgres
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres-data:/var/lib/postgresql/
+      - ./postgres_data:/var/lib/postgresql/
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123
       - POSTGRES_DB=postgres
     networks:
-        - app-tier
+      - app-tier
 
   mongo:
     image: mongo
@@ -89,18 +95,33 @@ services:
     depends_on:
       - mongo
 
-
   prometheus:
     image: bitnami/prometheus:2.42.0
     container_name: prometheus
+    ports:
+      - "1000:1000"
+    command:
+      - --web.listen-address=:10000
+      - --storage.tsdb.path=/prometheus
+      - --config.file=/etc/prometheus/prometheus.yml
     volumes:
-      - ./prometheus-data:/opt/bitnami/prometheus/data
+      - ../monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus_data:/opt/bitnami/prometheus/data
     networks:
-        - app-tier
+      - app-tier
 
   grafana:
-    image: grafana/grafana-oss:9.4.3
+    image: bitnami/grafana:9.4.3
     container_name: grafana
     ports:
       - "3000:3000"
-
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECUTIRY_ADMIN_PASSWORD=admin
+    volumes:
+      - ./grafana_data:/opt/bitnami/grafana/data
+      - ../monitoring/grafana/provisioning:/opt/bitnami/grafana/conf/provisioning
+    networks:
+      - app-tier
+    depends_on:
+      - prometheus
