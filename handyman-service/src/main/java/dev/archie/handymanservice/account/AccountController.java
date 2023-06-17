@@ -1,5 +1,7 @@
 package dev.archie.handymanservice.account;
 
+import dev.archie.handymanservice.account.bank.Bank;
+import dev.archie.handymanservice.account.bank.BankService;
 import dev.archie.handymanservice.account.dto.CreatingAccountDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,12 +13,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("accounts")
 public class AccountController {
 
     private final AccountService accountService;
+    private final BankService bankService;
 
     @PostMapping("/{handymanUserId}")
     public Account create(@RequestBody CreatingAccountDto accountDto, @PathVariable Long handymanUserId) {
@@ -36,6 +41,16 @@ public class AccountController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         accountService.delete(id);
+    }
+
+    @GetMapping("/banks")
+    public List<Bank> getAllBanks() {
+        return bankService.getAll();
+    }
+
+    @GetMapping("/banks/{name}")
+    public Bank getBankByName(@PathVariable String name) {
+        return bankService.getBankByName(name);
     }
 
 }

@@ -25,6 +25,8 @@ import java.util.Objects;
 @Entity
 @Table(name = "user_types")
 public class UserType {
+    public static final long HANDYMAN_USER_TYPE_ID = 2;
+    public static final long RANCHER_USER_TYPE_ID = 1;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

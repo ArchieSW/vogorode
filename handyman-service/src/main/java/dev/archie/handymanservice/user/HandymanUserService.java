@@ -9,12 +9,16 @@ import dev.archie.handymanservice.user.exception.HandymanUserAlreadyExistsExcept
 import dev.archie.handymanservice.user.skill.Skill;
 import dev.archie.handymanservice.user.skill.SkillRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -98,10 +102,19 @@ public class HandymanUserService {
 
     private List<Account> createAccounts(CreatingHandymanUserDto handymanUserDto, HandymanUser user) {
         List<Account> accounts = new ArrayList<>();
-        for (CreatingAccountDto accountDto : handymanUserDto.getAccounts()) {
+        List<CreatingAccountDto> accountsDto = handymanUserDto.getAccounts();
+        if (accountsDto == null) {
+            accountsDto = Collections.emptyList();
+        }
+        for (CreatingAccountDto accountDto : accountsDto) {
             Account account = accountService.create(accountDto, user.getId());
             accounts.add(account);
         }
         return accounts;
+    }
+
+    public Page<HandymanUser> getAll(int pageSize, int pageNumber) {
+        PageRequest request = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
+        return handymanUserRepository.findAll(request);
     }
 }

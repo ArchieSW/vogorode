@@ -1,6 +1,7 @@
 package dev.archie.handymanservice.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import dev.archie.handymanservice.account.bank.Bank;
 import dev.archie.handymanservice.user.HandymanUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,6 +46,10 @@ public class Account {
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_system")
     private PaymentSystem paymentSystem;
+
+    @ManyToOne
+    @JoinColumn(name = "bank_id")
+    private Bank bank;
 
     @Override
     public boolean equals(Object o) {

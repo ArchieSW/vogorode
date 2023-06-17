@@ -6,6 +6,9 @@ import dev.archie.rancherservice.gardener.dto.CreatingGardenerDto;
 import dev.archie.rancherservice.gardener.exceptions.GardenerAlreadyExistsException;
 import dev.archie.rancherservice.gardener.exceptions.GardenerDoesNotExistsException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,5 +65,10 @@ public class GardenerService {
                 .email(gardenerDto.getEmail())
                 .phone(gardenerDto.getPhone())
                 .build();
+    }
+
+    public Page<Gardener> getAll(int pageSize, int pageNumber) {
+        PageRequest request = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
+        return gardenerRepository.findAll(request);
     }
 }

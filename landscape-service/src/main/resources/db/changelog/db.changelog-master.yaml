@@ -15,3 +15,5 @@ databaseChangeLog:
       file: db/hw5/2023-04-06--04-add-coordinates.sql
   - include:
       file: db/hw8/2023-05-09--05-add-order-table.sql
+  - include:
+      file: db/hw9/2023-06-14--06-add-login-to-gardener.sql

@@ -8,7 +8,12 @@ import dev.archie.landscapeservice.user.exceptions.UserDoesNotExists;
 import dev.archie.landscapeservice.user.type.UserType;
 import dev.archie.landscapeservice.user.type.UserTypeRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -18,7 +23,6 @@ import java.util.UUID;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
 
     private final UserTypeRepository userTypeRepository;
@@ -98,5 +102,19 @@ public class UserService {
                 .longitude(creatingUserDto.getLongitude())
                 .latitude(creatingUserDto.getLatitude())
                 .build();
+    }
+
+    public Page<User> getAllHandymen(int pageSize, int pageNumber) {
+        PageRequest request = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
+        UserType handymanUserType = userTypeRepository.findById(UserType.HANDYMAN_USER_TYPE_ID)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT));
+        return userRepository.findByUserType(handymanUserType, request);
+    }
+
+    public Page<User> getAllRanchers(int pageSize, int pageNumber) {
+        PageRequest request = PageRequest.of(pageNumber, pageSize, Sort.by("email"));
+        UserType rancherUserType = userTypeRepository.findById(UserType.RANCHER_USER_TYPE_ID)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT));
+        return userRepository.findByUserType(rancherUserType, request);
     }
 }

@@ -2,6 +2,7 @@ package dev.archie.landscapeservice.field;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import dev.archie.landscapeservice.stat.Gardener;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Builder
@@ -44,6 +47,10 @@ public class Field {
     @JsonDeserialize(contentUsing = GeometryDeserializer.class)
     @Column(name = "area", columnDefinition = "geometry(Point, 4326)", nullable = false)
     private Geometry area;
+
+    @ManyToOne
+    @JoinColumn(name = "gardener_id")
+    private Gardener gardener;
 
 }
 

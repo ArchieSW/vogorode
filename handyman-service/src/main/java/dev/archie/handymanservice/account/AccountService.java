@@ -1,5 +1,6 @@
 package dev.archie.handymanservice.account;
 
+import dev.archie.handymanservice.account.bank.BankService;
 import dev.archie.handymanservice.account.dto.CreatingAccountDto;
 import dev.archie.handymanservice.account.exception.NoSuchAccountException;
 import dev.archie.handymanservice.handyman.exception.NoSuchHandymanUserException;
@@ -14,12 +15,12 @@ public class AccountService {
 
     private final AccountRepository accountRepository;
     private final HandymanUserRepository handymanUserRepository;
+    private final BankService bankService;
 
     public Account create(CreatingAccountDto accountDto, Long handymanUserId) {
         HandymanUser user = getHandymanUserById(handymanUserId);
         Account account = mapCreatingAccountDtoToAccount(accountDto, user);
-        System.out.println(accountDto);
-        System.out.println(account);
+        account.setBank(bankService.getBankByName(accountDto.getBankName()));
         return accountRepository.save(account);
     }
 
@@ -31,6 +32,7 @@ public class AccountService {
     public Account update(CreatingAccountDto accountDto, Long id) {
         Account account = getById(id);
         Account updatedAccount = mapCreatingAccountDtoToAccount(accountDto, account.getHandymanUser());
+        account.setBank(bankService.getBankByName(accountDto.getBankName()));
         updatedAccount.setId(id);
         return accountRepository.save(updatedAccount);
     }

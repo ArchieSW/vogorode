@@ -13,4 +13,6 @@ public class CreatingAccountDto {
 
     @Enumerated(EnumType.STRING)
     private PaymentSystem paymentSystem;
+
+    private String bankName;
 }

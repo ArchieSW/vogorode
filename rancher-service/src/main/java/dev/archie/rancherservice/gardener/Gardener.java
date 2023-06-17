@@ -1,6 +1,8 @@
 package dev.archie.rancherservice.gardener;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.fasterxml.jackson.annotation.Nulls;
 import dev.archie.rancherservice.field.Field;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,5 +48,10 @@ public class Gardener {
     @JsonIgnoreProperties(value = "gardener")
     @OneToMany(mappedBy = "gardener", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<Field> fields;
+
+    @JsonSetter(nulls = Nulls.AS_EMPTY)
+    public void setFields(List<Field> fields) {
+        this.fields = fields;
+    }
 
 }

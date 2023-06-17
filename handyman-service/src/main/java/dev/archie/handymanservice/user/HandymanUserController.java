@@ -2,6 +2,7 @@ package dev.archie.handymanservice.user;
 
 import dev.archie.handymanservice.user.dto.CreatingHandymanUserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,5 +46,11 @@ public class HandymanUserController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         userService.delete(id);
+    }
+
+    @GetMapping
+    public Page<HandymanUser> getAll(@RequestParam(name = "size") int pageSize,
+                                     @RequestParam(name = "number") int pageNumber) {
+        return userService.getAll(pageSize, pageNumber);
     }
 }
