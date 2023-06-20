@@ -1,7 +1,6 @@
-package dev.archie.handymanservice.account;
+package dev.archie.handymanservice.handyman.skill;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.archie.handymanservice.account.bank.Bank;
 import dev.archie.handymanservice.handyman.Handyman;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,24 +11,20 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-@Builder(toBuilder = true)
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "accounts")
-public class Account {
+@Builder
+@Document(collection = "skills")
+public class Skill {
+
     @Id
     private String id;
 
-    @JsonIgnoreProperties("accounts")
+    private String name;
+
+    @JsonIgnoreProperties("skills")
     @DocumentReference
     private Handyman handyman;
-
-    private String cardNumber;
-
-    private PaymentSystem paymentSystem;
-
-    private Bank bank;
-
 }
