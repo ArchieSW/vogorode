@@ -9,34 +9,36 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.websocket.server.PathParam;
+
 @RestController
-@RequestMapping("fields")
+@RequestMapping("/fields")
 @RequiredArgsConstructor
 public class FieldController {
 
     private final FieldService fieldService;
 
-    @PostMapping
-    public Field create(@RequestBody CreatingFieldDto fieldDto, @RequestParam Long gardenerId) {
-        return fieldService.create(fieldDto, gardenerId);
+    @PostMapping("/{gardenerId}")
+    public Field create(@RequestBody CreatingFieldDto creatingFieldDto,
+                        @PathVariable String gardenerId) {
+        return fieldService.create(creatingFieldDto, gardenerId);
     }
 
-    @GetMapping("/{id}")
-    public Field getById(@PathVariable Long id) {
-        return fieldService.getById(id);
+    @GetMapping("/{fieldId}")
+    public Field getById(@PathVariable String fieldId) {
+        return fieldService.getById(fieldId);
     }
 
-    @PutMapping("/{id}")
-    public Field update(@RequestBody CreatingFieldDto fieldDto, @PathVariable Long id) {
-        return fieldService.update(fieldDto, id);
+    @PutMapping("/{fieldId}")
+    public Field update(@RequestBody CreatingFieldDto creatingFieldDto, @PathVariable String fieldId) {
+        return fieldService.update(creatingFieldDto, fieldId);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        fieldService.delete(id);
+    @DeleteMapping("/{fieldId}")
+    public void delete(@PathVariable String fieldId) {
+        fieldService.delete(fieldId);
     }
 
 }

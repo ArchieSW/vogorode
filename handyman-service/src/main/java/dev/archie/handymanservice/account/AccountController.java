@@ -29,7 +29,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public Account getById(String id) {
+    public Account getById(@PathVariable String id) {
         return accountService.getById(id);
     }
 

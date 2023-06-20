@@ -1,6 +1,6 @@
 package dev.archie.rancherservice.rancher;
 
-import dev.archie.rancherservice.rancher.dto.CreatingProfileDto;
+import dev.archie.rancherservice.rancher.dto.CreatingGardenerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/ranchers")
-public class RancherController {
+@RequestMapping("/gardeners")
+public class GardenerController {
 
-    private final RancherService rancherService;
+    private final GardenerService gardenerService;
 
     /**
-     * @param creatingProfileDto rancher to create
+     * @param creatingGardenerDto rancher to create
      * @return created rancher's profile
      */
     @PostMapping
-    public Profile create(@RequestBody CreatingProfileDto creatingProfileDto) {
-        return rancherService.create(creatingProfileDto);
+    public Gardener create(@RequestBody CreatingGardenerDto creatingGardenerDto) {
+        return gardenerService.create(creatingGardenerDto);
     }
 
     /**
@@ -32,18 +32,18 @@ public class RancherController {
      * @return found profile
      */
     @GetMapping("/{id}")
-    public Profile getById(@PathVariable String id) {
-        return rancherService.getProfileById(id);
+    public Gardener getById(@PathVariable String id) {
+        return gardenerService.getById(id);
     }
 
     /**
      * @param id of existing rancher
-     * @param creatingProfileDto new fields. New email should not exist
+     * @param creatingGardenerDto new fields. New email should not exist
      * @return updated profile
      */
     @PutMapping("/{id}")
-    public Profile update(@PathVariable String id, @RequestBody CreatingProfileDto creatingProfileDto) {
-        return rancherService.update(id, creatingProfileDto);
+    public Gardener update(@PathVariable String id, @RequestBody CreatingGardenerDto creatingGardenerDto) {
+        return gardenerService.update(id, creatingGardenerDto);
     }
 
     /**
@@ -51,7 +51,7 @@ public class RancherController {
      */
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
-        rancherService.delete(id);
+        gardenerService.delete(id);
     }
 
 }

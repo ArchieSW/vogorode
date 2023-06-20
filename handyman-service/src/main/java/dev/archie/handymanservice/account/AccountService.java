@@ -21,7 +21,10 @@ public class AccountService {
         Handyman user = getHandymanUserById(handymanUserId);
         Account account = mapCreatingAccountDtoToAccount(accountDto, user);
         account.setBank(bankService.getBankByName(accountDto.getBankName()));
-        return accountRepository.save(account);
+        account = accountRepository.save(account);
+        user.getAccounts().add(account);
+        handymanRepository.save(user);
+        return account;
     }
 
     public Account getById(String id) {

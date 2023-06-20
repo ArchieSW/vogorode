@@ -1,6 +1,6 @@
 package dev.archie.rancherservice.field;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface FieldRepository extends JpaRepository<Field, Long> {
+public interface FieldRepository extends MongoRepository<Field, String> {
 }

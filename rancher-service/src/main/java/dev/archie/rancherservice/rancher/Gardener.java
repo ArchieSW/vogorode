@@ -1,4 +1,4 @@
-package dev.archie.rancherservice.gardener;
+package dev.archie.rancherservice.rancher;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSetter;
@@ -9,44 +9,38 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import java.util.List;
+import java.util.UUID;
 
 @Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "gardener")
+@Document(collection = "gardeners")
 public class Gardener {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private String id;
 
-    @Column(name = "first_name", nullable = false)
+    private UUID innerId;
+
     private String firstName;
 
-    @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "phone")
     private String phone;
 
+    private String login;
+
     @JsonIgnoreProperties(value = "gardener")
-    @OneToMany(mappedBy = "gardener", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @DocumentReference
     private List<Field> fields;
 
     @JsonSetter(nulls = Nulls.AS_EMPTY)
