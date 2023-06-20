@@ -23,7 +23,7 @@ public class HandymanController {
      * @return Created profile
      */
     @PostMapping
-    public Handyman create(@RequestBody CreatingHandymanDto creatingHandymanDto) {
+    public Profile create(@RequestBody CreatingHandymanDto creatingHandymanDto) {
         return handymanService.create(creatingHandymanDto);
     }
 
@@ -32,8 +32,8 @@ public class HandymanController {
      * @return found profile
      */
     @GetMapping("/{id}")
-    public Handyman getById(@PathVariable String id) {
-        return handymanService.getById(id);
+    public Profile getById(@PathVariable String id) {
+        return handymanService.getProfileById(id);
     }
 
     /**
@@ -42,7 +42,7 @@ public class HandymanController {
      * @return Profile od updated handyman
      */
     @PutMapping("/{id}")
-    public Handyman update(@PathVariable String id, @RequestBody CreatingHandymanDto creatingHandymanDto) {
+    public Profile update(@PathVariable String id, @RequestBody CreatingHandymanDto creatingHandymanDto) {
         return handymanService.update(id, creatingHandymanDto);
     }
 

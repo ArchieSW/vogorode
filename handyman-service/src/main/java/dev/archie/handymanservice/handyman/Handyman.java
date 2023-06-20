@@ -1,7 +1,5 @@
 package dev.archie.handymanservice.handyman;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.archie.handymanservice.account.Account;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
@@ -25,18 +23,5 @@ public class Handyman {
     private Double longitude;
 
     private List<String> skills;
-
-    private String firstName;
-
-    private String lastName;
-
-    private String email;
-
-    private String phone;
-
-    private byte[] photo;
-
-    @JsonIgnoreProperties("handymanUser")
-    private List<Account> accounts;
 
 }

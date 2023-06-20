@@ -1,10 +1,11 @@
 package dev.archie.handymanservice.account;
 
-import dev.archie.handymanservice.account.bank.Bank;
+import dev.archie.handymanservice.account.bank.BankService;
 import dev.archie.handymanservice.account.dto.CreatingAccountDto;
 import dev.archie.handymanservice.account.exception.NoSuchAccountException;
-import dev.archie.handymanservice.handyman.Handyman;
-import dev.archie.handymanservice.handyman.HandymanService;
+import dev.archie.handymanservice.handyman.exception.NoSuchHandymanUserException;
+import dev.archie.handymanservice.user.HandymanUser;
+import dev.archie.handymanservice.user.HandymanUserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,67 +13,42 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService {
 
-    private final HandymanService handymanService;
+    private final AccountRepository accountRepository;
+    private final HandymanUserRepository handymanUserRepository;
+    private final BankService bankService;
 
-    public Account create(CreatingAccountDto accountDto, String handymanUserId) {
-        Handyman user = getHandymanById(handymanUserId);
-        Account account = mapCreatingAccountDtoToAccount(accountDto);
-        int maxId = getMaxId(user);
-        account.setId(maxId + 1);
-        user.getAccounts().add(account);
-        handymanService.update(user);
-        return account;
+    public Account create(CreatingAccountDto accountDto, Long handymanUserId) {
+        HandymanUser user = getHandymanUserById(handymanUserId);
+        Account account = mapCreatingAccountDtoToAccount(accountDto, user);
+        account.setBank(bankService.getBankByName(accountDto.getBankName()));
+        return accountRepository.save(account);
     }
 
-    public Account getAccountById(int id, String handymanId) {
-        Handyman user = getHandymanById(handymanId);
-        return getAccountById(id, user);
+    public Account getById(Long id) {
+        return accountRepository.findById(id)
+                .orElseThrow(() -> new NoSuchAccountException(id));
     }
 
-    public Account getAccountById(int id, Handyman handyman) {
-        return handyman.getAccounts().stream().filter(currentAccount -> currentAccount.getId() == id).findFirst().orElseThrow(() -> new NoSuchAccountException((long) id));
+    public Account update(CreatingAccountDto accountDto, Long id) {
+        Account account = getById(id);
+        Account updatedAccount = mapCreatingAccountDtoToAccount(accountDto, account.getHandymanUser());
+        account.setBank(bankService.getBankByName(accountDto.getBankName()));
+        updatedAccount.setId(id);
+        return accountRepository.save(updatedAccount);
     }
 
-    public Account update(CreatingAccountDto accountDto, int id, String handymanId) {
-        Handyman handyman = handymanService.getById(handymanId);
-        Account account = getAccountById(id, handyman);
-        Account updatedAccount = mapCreatingAccountDtoToAccount(accountDto);
-        copyAccount(account, updatedAccount);
-        handymanService.update(handyman);
-        return account;
+    public void delete(Long id) {
+        accountRepository.delete(getById(id));
     }
 
-    public void delete(int id, String handymanId) {
-        Handyman handyman = getHandymanById(handymanId);
-        boolean removed = handyman.getAccounts().removeIf(account -> account.getId() == id);
-        if (!removed) {
-            throw new NoSuchAccountException((long) id);
-        }
-        handymanService.update(handyman);
+    private HandymanUser getHandymanUserById(Long handymanUserId) {
+        return handymanUserRepository.findById(handymanUserId)
+                .orElseThrow(() -> new NoSuchHandymanUserException(handymanUserId));
     }
 
-    private int getMaxId(Handyman user) {
-        return user.getAccounts().stream()
-                .mapToInt(Account::getId)
-                .max()
-                .orElse(0);
-    }
-
-    private Handyman getHandymanById(String handymanId) {
-        return handymanService.getById(handymanId);
-    }
-
-    private void copyAccount(Account destination, Account source) {
-        destination.setCardNumber(source.getCardNumber());
-        destination.setBank(source.getBank());
-        destination.setPaymentSystem(source.getPaymentSystem());
-    }
-
-    private Account mapCreatingAccountDtoToAccount(CreatingAccountDto accountDto) {
+    private Account mapCreatingAccountDtoToAccount(CreatingAccountDto accountDto, HandymanUser user) {
         return Account.builder()
-                .bank(Bank.builder()
-                        .name(accountDto.getBankName())
-                        .build())
+                .handymanUser(user)
                 .cardNumber(accountDto.getCardNumber())
                 .paymentSystem(accountDto.getPaymentSystem())
                 .build();

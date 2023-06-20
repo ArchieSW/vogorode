@@ -1,6 +1,5 @@
 package dev.archie.handymanservice.handyman.dto;
 
-import dev.archie.handymanservice.account.dto.CreatingAccountDto;
 import lombok.Builder;
 import lombok.Data;
 
@@ -21,11 +20,5 @@ public class CreatingHandymanDto {
     private Double longitude;
 
     private List<String> skills;
-
-    private String firstName;
-
-    private String lastName;
-
-    private List<CreatingAccountDto> accounts;
 
 }
