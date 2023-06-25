@@ -3,10 +3,8 @@ package dev.archie.landscapeservice.field;
 import dev.archie.landscapeservice.field.dto.CreatingFieldDto;
 import dev.archie.landscapeservice.field.exceptions.FieldDoesNotExistsException;
 import dev.archie.landscapeservice.gardener.Gardener;
-import dev.archie.landscapeservice.gardener.GardenerRepository;
 import dev.archie.landscapeservice.gardener.GardenerService;
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Geometry;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

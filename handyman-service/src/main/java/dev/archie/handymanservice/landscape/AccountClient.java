@@ -1,6 +1,5 @@
 package dev.archie.handymanservice.landscape;
 
-import dev.archie.handymanservice.account.Account;
 import dev.archie.handymanservice.account.dto.CreatingAccountDto;
 import dev.archie.handymanservice.landscape.dto.AccountDto;
 import org.springframework.cloud.openfeign.FeignClient;

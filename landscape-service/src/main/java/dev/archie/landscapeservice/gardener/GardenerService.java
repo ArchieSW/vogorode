@@ -1,7 +1,6 @@
 package dev.archie.landscapeservice.gardener;
 
 import dev.archie.landscapeservice.gardener.dto.CreatingGardenerDto;
-import dev.archie.landscapeservice.user.UserService;
 import dev.archie.landscapeservice.user.exceptions.NoSuchUserException;
 import dev.archie.landscapeservice.user.type.UserType;
 import dev.archie.landscapeservice.user.type.UserTypeRepository;
@@ -16,7 +15,6 @@ import java.util.UUID;
 public class GardenerService {
 
     private final GardenerRepository gardenerRepository;
-    private final UserService userService;
     private final UserTypeRepository userTypeRepository;
 
     public Gardener create(CreatingGardenerDto gardenerDto) {

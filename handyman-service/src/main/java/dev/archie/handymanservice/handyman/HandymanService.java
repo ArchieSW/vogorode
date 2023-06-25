@@ -7,9 +7,7 @@ import dev.archie.handymanservice.handyman.exception.NoSuchUserException;
 import dev.archie.handymanservice.handyman.skill.Skill;
 import dev.archie.handymanservice.handyman.skill.SkillRepository;
 import dev.archie.handymanservice.landscape.HandymanClient;
-import dev.archie.handymanservice.landscape.dto.CreatingUserDto;
 import dev.archie.handymanservice.landscape.LandscapeService;
-import dev.archie.handymanservice.landscape.User;
 import dev.archie.handymanservice.landscape.dto.HandymanDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,8 +17,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class HandymanService {
-
-    private static final long HANDYMAN_USER_TYPE_ID = 2;
 
     private final HandymanRepository handymanRepository;
 
