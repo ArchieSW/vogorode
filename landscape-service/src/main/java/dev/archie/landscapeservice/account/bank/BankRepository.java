@@ -12,7 +12,7 @@ public interface BankRepository extends JpaRepository<Bank, Long> {
 
     @Query("""
             select new dev.archie.landscapeservice.stat.BankStat(a.bank.name, min(u.createdAt), max(u.createdAt))
-            from Account a join User u on a.handymanUser.email = u.email
+            from Account a join User u on a.handyman.email = u.email
             group by a.bank.name
             """)
     List<BankStat> findAllBankStat();

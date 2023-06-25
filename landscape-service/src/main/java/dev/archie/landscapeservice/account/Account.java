@@ -2,6 +2,7 @@ package dev.archie.landscapeservice.account;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import dev.archie.landscapeservice.account.bank.Bank;
+import dev.archie.landscapeservice.handyman.Handyman;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -37,11 +38,6 @@ public class Account {
     @Column(name = "card_number")
     private String cardNumber;
 
-    @JsonIgnoreProperties("accounts")
-    @ManyToOne
-    @JoinColumn(name = "handyman_user_id")
-    private HandymanUser handymanUser;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "payment_system")
     private PaymentSystem paymentSystem;
@@ -49,6 +45,11 @@ public class Account {
     @ManyToOne
     @JoinColumn(name = "bank_id")
     private Bank bank;
+
+    @ManyToOne
+    @JoinColumn(name = "handyman_id")
+    @JsonIgnoreProperties("accounts")
+    private Handyman handyman;
 
     @Override
     public boolean equals(Object o) {

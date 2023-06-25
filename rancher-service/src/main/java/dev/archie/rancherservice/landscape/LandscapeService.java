@@ -1,5 +1,6 @@
 package dev.archie.rancherservice.landscape;
 
+import dev.archie.rancherservice.landscape.dto.CreatingUserDto;
 import dev.archie.rancherservice.rancher.exception.UnableToConnectToInnerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

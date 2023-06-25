@@ -1,8 +1,7 @@
 package dev.archie.rancherservice.rancher;
 
-import dev.archie.rancherservice.landscape.CreatingUserDto;
-import dev.archie.rancherservice.landscape.LandscapeService;
-import dev.archie.rancherservice.landscape.User;
+import dev.archie.rancherservice.landscape.GardenerClient;
+import dev.archie.rancherservice.landscape.dto.GardenerDto;
 import dev.archie.rancherservice.rancher.dto.CreatingGardenerDto;
 import dev.archie.rancherservice.rancher.exception.NoSuchUserException;
 import lombok.RequiredArgsConstructor;
@@ -12,20 +11,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GardenerService {
 
-    private static final long RANCHER_USER_TYPE = 1;
-
-    private final LandscapeService landscapeService;
-
     private final GardenerRepository gardenerRepository;
+    private final GardenerClient gardenerClient;
 
     /**
      * @param creatingGardenerDto rancher to create
      * @return created rancher's profile
      */
     public Gardener create(CreatingGardenerDto creatingGardenerDto) {
-        CreatingUserDto creatingUserDto = mapCreatingGardenerDtoToUserOne(creatingGardenerDto);
-        User user = landscapeService.createUser(creatingUserDto);
-        Gardener gardener = mapGardenerDtoToGardener(creatingGardenerDto, user);
+        GardenerDto gardenerDto = gardenerClient.create(creatingGardenerDto);
+        Gardener gardener = mapGardenerDtoToGardener(creatingGardenerDto, gardenerDto);
+        gardener.setInnerId(gardenerDto.getId());
         return gardenerRepository.save(gardener);
     }
 
@@ -45,8 +41,7 @@ public class GardenerService {
      */
     public Gardener update(String id, CreatingGardenerDto creatingGardenerDto) {
         Gardener gardener = getById(id);
-        CreatingUserDto creatingUserDto = mapCreatingGardenerDtoToUserOne(creatingGardenerDto);
-        User user = landscapeService.update(gardener.getInnerId(), creatingUserDto);
+        GardenerDto user = gardenerClient.update(gardener.getInnerId(), creatingGardenerDto);
         gardener = mapGardenerDtoToGardener(creatingGardenerDto, user);
         gardener.setId(gardener.getId());
         return gardenerRepository.save(gardener);
@@ -57,11 +52,11 @@ public class GardenerService {
      */
     public void delete(String id) {
         Gardener gardener= getById(id);
-        landscapeService.delete(gardener.getInnerId());
+        gardenerClient.delete(gardener.getInnerId());
         gardenerRepository.delete(gardener);
     }
 
-    private static Gardener mapGardenerDtoToGardener(CreatingGardenerDto creatingGardenerDto, User user) {
+    private static Gardener mapGardenerDtoToGardener(CreatingGardenerDto creatingGardenerDto, GardenerDto user) {
         return Gardener.builder()
                 .lastName(creatingGardenerDto.getLastName())
                 .firstName(creatingGardenerDto.getFirstName())
@@ -69,17 +64,6 @@ public class GardenerService {
                 .email(user.getEmail())
                 .login(user.getLogin())
                 .innerId(user.getId())
-                .build();
-    }
-
-    private static CreatingUserDto mapCreatingGardenerDtoToUserOne(CreatingGardenerDto creatingGardenerDto) {
-        return CreatingUserDto.builder()
-                .userTypeId(RANCHER_USER_TYPE)
-                .phoneNumber(creatingGardenerDto.getPhone())
-                .login(creatingGardenerDto.getLogin())
-                .longitude(creatingGardenerDto.getLongitude())
-                .latitude(creatingGardenerDto.getLatitude())
-                .email(creatingGardenerDto.getEmail())
                 .build();
     }
 

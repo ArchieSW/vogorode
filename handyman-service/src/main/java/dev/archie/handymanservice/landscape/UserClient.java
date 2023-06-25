@@ -1,5 +1,6 @@
 package dev.archie.handymanservice.landscape;
 
+import dev.archie.handymanservice.landscape.dto.CreatingUserDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.UUID;
 
 @FeignClient(value = "user-service", url = "${application.landscape.rest.url}")
-public interface LandscapeClient {
+public interface UserClient {
 
     @PostMapping("/users")
     User create(@RequestBody CreatingUserDto creatingUserDto);

@@ -2,6 +2,8 @@ package dev.archie.rancherservice.field;
 
 import dev.archie.rancherservice.field.dto.CreatingFieldDto;
 import dev.archie.rancherservice.field.exception.NoSuchFieldWithIdException;
+import dev.archie.rancherservice.landscape.FieldClient;
+import dev.archie.rancherservice.landscape.dto.FieldDto;
 import dev.archie.rancherservice.rancher.Gardener;
 import dev.archie.rancherservice.rancher.GardenerRepository;
 import dev.archie.rancherservice.rancher.GardenerService;
@@ -16,14 +18,17 @@ public class FieldService {
 
     private final GardenerService gardenerService;
     private final GardenerRepository gardenerRepository;
+    private final FieldClient fieldClient;
 
     public Field create(CreatingFieldDto creatingFieldDto, String gardenerId) {
         Gardener gardener = gardenerService.getById(gardenerId);
+        FieldDto fieldDto = fieldClient.create(creatingFieldDto, gardener.getInnerId());
         Field field = mapCreatingFieldDtoToField(creatingFieldDto);
+        field.setInnerId(fieldDto.getId());
         field.setGardener(gardener);
         field = fieldRepository.save(field);
         gardener.getFields().add(field);
-        gardenerRepository.save(gardener)
+        gardenerRepository.save(gardener);
         return field;
     }
 
@@ -34,6 +39,7 @@ public class FieldService {
 
     public Field update(CreatingFieldDto creatingFieldDto, String id) {
         Field field = getById(id);
+        fieldClient.update(creatingFieldDto, field.getInnerId());
         Field updatedField = mapCreatingFieldDtoToField(creatingFieldDto);
         copyField(field, updatedField);
         field = fieldRepository.save(field);
@@ -44,13 +50,15 @@ public class FieldService {
     }
 
     public void delete(String id) {
-        fieldRepository.delete(getById(id));
+        Field field = getById(id);
+        fieldClient.delete(field.getInnerId());
+        fieldRepository.delete(field);
     }
 
     private static Field mapCreatingFieldDtoToField(CreatingFieldDto creatingFieldDto) {
         return Field.builder()
                 .address(creatingFieldDto.getAddress())
-                .area(creatingFieldDto.getArea())
+                .area(creatingFieldDto.getFieldArea())
                 .longitude(creatingFieldDto.getLongitude())
                 .latitude(creatingFieldDto.getLatitude())
                 .address(creatingFieldDto.getAddress())

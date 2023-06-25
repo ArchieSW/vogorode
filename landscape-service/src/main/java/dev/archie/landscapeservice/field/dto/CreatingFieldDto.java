@@ -1,4 +1,4 @@
-package dev.archie.rancherservice.field.dto;
+package dev.archie.landscapeservice.field.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

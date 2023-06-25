@@ -1,4 +1,4 @@
-package dev.archie.handymanservice.landscape;
+package dev.archie.rancherservice.landscape.dto;
 
 import lombok.Builder;
 import lombok.Data;

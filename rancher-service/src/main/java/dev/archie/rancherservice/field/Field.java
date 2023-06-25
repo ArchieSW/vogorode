@@ -24,6 +24,8 @@ public class Field {
     @Id
     private String id;
 
+    private Long innerId;
+
     private Double latitude;
 
     private Double longitude;

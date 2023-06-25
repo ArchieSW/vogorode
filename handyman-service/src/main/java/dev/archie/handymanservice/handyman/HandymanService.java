@@ -6,9 +6,11 @@ import dev.archie.handymanservice.handyman.dto.CreatingHandymanDto;
 import dev.archie.handymanservice.handyman.exception.NoSuchUserException;
 import dev.archie.handymanservice.handyman.skill.Skill;
 import dev.archie.handymanservice.handyman.skill.SkillRepository;
-import dev.archie.handymanservice.landscape.CreatingUserDto;
+import dev.archie.handymanservice.landscape.HandymanClient;
+import dev.archie.handymanservice.landscape.dto.CreatingUserDto;
 import dev.archie.handymanservice.landscape.LandscapeService;
 import dev.archie.handymanservice.landscape.User;
+import dev.archie.handymanservice.landscape.dto.HandymanDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,18 +30,19 @@ public class HandymanService {
 
     private final AccountService accountService;
 
+    private final HandymanClient handymanClient;
+
     /**
      * @param creatingHandymanDto handyman dto create. Email should not exist
      * @return Created profile
      */
     public Handyman create(CreatingHandymanDto creatingHandymanDto) {
-        CreatingUserDto creatingUserDto = mapCreatingHandymanDtoToUserOne(creatingHandymanDto);
-        User createdUser = landscapeService.createUser(creatingUserDto);
+        HandymanDto handymanDto = handymanClient.create(creatingHandymanDto);
 
         try {
             List<Skill> skills = saveSkills(creatingHandymanDto);
-            Handyman handyman = mapUserToHandyman(createdUser, creatingHandymanDto);
-            handyman.setInnerId(createdUser.getId());
+            Handyman handyman = mapUserToHandyman(handymanDto, creatingHandymanDto);
+            handyman.setInnerId(handymanDto.getId());
             handyman.setSkills(skills);
             handyman = handymanRepository.insert(handyman);
 
@@ -48,7 +51,7 @@ public class HandymanService {
             handyman.setAccounts(accounts);
             return handymanRepository.save(handyman);
         } catch (Throwable anyException) {
-            landscapeService.delete(createdUser.getId());
+            landscapeService.delete(handymanDto.getId());
             throw anyException;
         }
     }
@@ -69,9 +72,8 @@ public class HandymanService {
      */
     public Handyman update(String id, CreatingHandymanDto creatingHandymanDto) {
         Handyman handyman = getById(id);
-        CreatingUserDto creatingUserDto = mapCreatingHandymanDtoToUserOne(creatingHandymanDto);
-        User updatedUser = landscapeService.update(handyman.getInnerId(), creatingUserDto);
-        Handyman updatedHandyman = mapUserToHandyman(updatedUser, creatingHandymanDto);
+        HandymanDto updated = handymanClient.update(handyman.getInnerId(), creatingHandymanDto);
+        Handyman updatedHandyman = mapUserToHandyman(updated, creatingHandymanDto);
         updatedHandyman.setId(handyman.getId());
         handymanRepository.save(updatedHandyman);
         List<Account> accounts = saveAccounts(creatingHandymanDto, updatedHandyman.getId());
@@ -86,7 +88,7 @@ public class HandymanService {
      */
     public void delete(String id) {
         Handyman handyman = getById(id);
-        landscapeService.delete(handyman.getInnerId());
+        handymanClient.delete(handyman.getInnerId());
         handymanRepository.delete(handyman);
     }
 
@@ -105,18 +107,7 @@ public class HandymanService {
                 .toList();
     }
 
-    private CreatingUserDto mapCreatingHandymanDtoToUserOne(CreatingHandymanDto creatingHandymanDto) {
-        return CreatingUserDto.builder()
-                .email(creatingHandymanDto.getEmail())
-                .login(creatingHandymanDto.getLogin())
-                .longitude(creatingHandymanDto.getLongitude())
-                .latitude(creatingHandymanDto.getLatitude())
-                .phoneNumber(creatingHandymanDto.getPhoneNumber())
-                .userTypeId(HANDYMAN_USER_TYPE_ID)
-                .build();
-    }
-
-    private Handyman mapUserToHandyman(User createdUser, CreatingHandymanDto creatingHandymanDto) {
+    private Handyman mapUserToHandyman(HandymanDto createdUser, CreatingHandymanDto creatingHandymanDto) {
         return Handyman.builder()
                 .longitude(createdUser.getLongitude())
                 .latitude(createdUser.getLatitude())

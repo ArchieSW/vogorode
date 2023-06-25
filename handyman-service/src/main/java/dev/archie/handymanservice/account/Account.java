@@ -22,6 +22,8 @@ public class Account {
     @Id
     private String id;
 
+    private Long innerId;
+
     @JsonIgnoreProperties("accounts")
     @DocumentReference
     private Handyman handyman;
@@ -30,6 +32,7 @@ public class Account {
 
     private PaymentSystem paymentSystem;
 
+    @DocumentReference
     private Bank bank;
 
 }

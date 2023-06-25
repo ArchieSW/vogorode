@@ -2,7 +2,7 @@ package dev.archie.landscapeservice.field;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import dev.archie.landscapeservice.stat.Gardener;
+import dev.archie.landscapeservice.gardener.Gardener;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,7 +45,6 @@ public class Field {
 
     @JsonSerialize(using = GeometrySerializer.class)
     @JsonDeserialize(contentUsing = GeometryDeserializer.class)
-    @Column(name = "area", columnDefinition = "geometry(Point, 4326)", nullable = false)
     private Geometry area;
 
     @ManyToOne
