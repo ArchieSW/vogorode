@@ -13,6 +13,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -27,6 +29,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class User {
 
     @Id
@@ -60,6 +63,12 @@ public class User {
     @JoinColumn(name = "user_type_id")
     private UserType userType;
 
+    @Column(name = "first_name")
+    private String firstName;
+
+    @Column(name = "last_name")
+    private String lastName;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -73,15 +82,4 @@ public class User {
         return getClass().hashCode();
     }
 
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + id + ", " +
-                "login = " + login + ", " +
-                "email = " + email + ", " +
-                "phoneNumber = " + phoneNumber + ", " +
-                "createdAt = " + createdAt + ", " +
-                "lastUpdatedAt = " + lastUpdatedAt + ", " +
-                "userType = " + userType + ")";
-    }
 }

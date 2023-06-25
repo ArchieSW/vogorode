@@ -5,7 +5,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 public class NoSuchAccountException extends ResponseStatusException {
 
-    public NoSuchAccountException(Long id) {
+    public NoSuchAccountException(String id) {
         super(HttpStatus.NOT_FOUND, "No such account with id: " + id);
     }
 }

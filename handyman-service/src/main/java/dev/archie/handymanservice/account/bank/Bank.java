@@ -1,26 +1,23 @@
 package dev.archie.handymanservice.account.bank;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-@Entity
-@Table(name = "banks")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Document(collection = "banks")
 public class Bank {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+    private String id;
 
-    @Column(name = "name", nullable = false)
     private String name;
 
 }

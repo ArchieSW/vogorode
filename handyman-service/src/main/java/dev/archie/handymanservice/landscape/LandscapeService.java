@@ -1,8 +1,12 @@
 package dev.archie.handymanservice.landscape;
 
 import dev.archie.handymanservice.handyman.exception.UnableToConnectToInnerService;
+import dev.archie.handymanservice.landscape.dto.CreatingUserDto;
+import feign.FeignException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
@@ -10,12 +14,15 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class LandscapeService {
 
-    private final LandscapeClient landscapeClient;
+    private final UserClient userClient;
 
     public User createUser(CreatingUserDto creatingUserDto) {
         try {
-            return landscapeClient.create(creatingUserDto);
-        } catch (Exception e) {
+            return userClient.create(creatingUserDto);
+        } catch (FeignException.FeignClientException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.status()), e.getMessage());
+        }
+        catch (Exception e) {
             throw new UnableToConnectToInnerService();
         }
     }
@@ -23,21 +30,31 @@ public class LandscapeService {
 
     public User update(UUID id, CreatingUserDto creatingUserDto) {
         try {
-            return landscapeClient.update(id, creatingUserDto);
-        } catch (Exception e) {
+            return userClient.update(id, creatingUserDto);
+        } catch (FeignException.FeignClientException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.status()), e.getMessage());
+        }catch (Exception e) {
             throw new UnableToConnectToInnerService();
         }
     }
 
     public void delete(UUID id) {
         try {
-            landscapeClient.delete(id);
+            userClient.delete(id);
+        }catch (FeignException.FeignClientException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.status()), e.getMessage());
         } catch (Exception e) {
             throw new UnableToConnectToInnerService();
         }
     }
 
     public User getById(UUID id) {
-        return landscapeClient.getById(id);
+        try {
+            return userClient.getById(id);
+        }catch (FeignException.FeignClientException e) {
+            throw new ResponseStatusException(HttpStatus.valueOf(e.status()), e.getMessage());
+        } catch (Exception e) {
+            throw new UnableToConnectToInnerService();
+        }
     }
 }

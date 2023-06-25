@@ -1,14 +1,13 @@
 package dev.archie.landscapeservice.account.skill;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import dev.archie.landscapeservice.account.HandymanUser;
+import dev.archie.landscapeservice.handyman.Handyman;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -35,9 +34,9 @@ public class Skill {
     @Column(name = "name")
     private String name;
 
+    @ManyToOne
+    @JoinColumn(name = "handyman_id")
     @JsonIgnoreProperties("skills")
-    @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "handyman_user_id")
-    private HandymanUser handymanUser;
+    private Handyman handyman;
 
 }

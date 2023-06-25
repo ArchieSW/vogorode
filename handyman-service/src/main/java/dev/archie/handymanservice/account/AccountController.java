@@ -24,22 +24,22 @@ public class AccountController {
     private final BankService bankService;
 
     @PostMapping("/{handymanUserId}")
-    public Account create(@RequestBody CreatingAccountDto accountDto, @PathVariable Long handymanUserId) {
+    public Account create(@RequestBody CreatingAccountDto accountDto, @PathVariable String handymanUserId) {
         return accountService.create(accountDto, handymanUserId);
     }
 
     @GetMapping("/{id}")
-    public Account getById(Long id) {
+    public Account getById(@PathVariable String id) {
         return accountService.getById(id);
     }
 
     @PutMapping("/{id}")
-    public Account update(@RequestBody CreatingAccountDto accountDto, @PathVariable Long id) {
+    public Account update(@RequestBody CreatingAccountDto accountDto, @PathVariable String id) {
         return accountService.update(accountDto, id);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
+    public void delete(@PathVariable String id) {
         accountService.delete(id);
     }
 
