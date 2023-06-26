@@ -1,8 +1,7 @@
 package dev.archie.landscapeservice.field;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import dev.archie.landscapeservice.gardener.Gardener;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,8 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.locationtech.jts.geom.Geometry;
-import org.n52.jackson.datatype.jts.GeometryDeserializer;
-import org.n52.jackson.datatype.jts.GeometrySerializer;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -44,11 +41,10 @@ public class Field {
     @Column(name = "longitude", nullable = false)
     private Double longitude;
 
-    @JsonSerialize(using = GeometrySerializer.class)
-    @JsonDeserialize(contentUsing = GeometryDeserializer.class)
+    @JsonIgnore
     private Geometry area;
 
-    @JsonIgnoreProperties("fields")
+    @JsonIgnoreProperties({"fields", "orders"})
     @ManyToOne
     @JoinColumn(name = "gardener_id")
     private Gardener gardener;

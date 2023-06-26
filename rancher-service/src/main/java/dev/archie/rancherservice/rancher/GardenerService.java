@@ -1,10 +1,10 @@
 package dev.archie.rancherservice.rancher;
 
+import dev.archie.landscapeservice.order.dto.SendOrderToUser;
 import dev.archie.rancherservice.landscape.GardenerClient;
 import dev.archie.rancherservice.landscape.dto.CreatingOrderDto;
 import dev.archie.rancherservice.landscape.dto.GardenerDto;
 import dev.archie.rancherservice.landscape.dto.OrderDto;
-import dev.archie.rancherservice.landscape.dto.SkillDto;
 import dev.archie.rancherservice.landscape.dto.WorkStatus;
 import dev.archie.rancherservice.landscape.dto.WorkType;
 import dev.archie.rancherservice.order.OrderService;
@@ -12,6 +12,7 @@ import dev.archie.rancherservice.rancher.dto.CreatingGardenerDto;
 import dev.archie.rancherservice.rancher.exception.NoSuchUserException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class GardenerService {
     private final GardenerRepository gardenerRepository;
     private final GardenerClient gardenerClient;
     private final OrderService orderService;
+    private final KafkaTemplate<String, SendOrderToUser> kafkaTemplate;
 
     /**
      * @param creatingGardenerDto rancher to create
@@ -48,7 +50,7 @@ public class GardenerService {
     }
 
     /**
-     * @param id of existing rancher
+     * @param id                  of existing rancher
      * @param creatingGardenerDto new fields. New email should not exist
      * @return updated profile
      */
@@ -64,7 +66,7 @@ public class GardenerService {
      * @param id of existing user
      */
     public void delete(String id) {
-        Gardener gardener= getById(id);
+        Gardener gardener = getById(id);
         gardenerClient.delete(gardener.getInnerId());
         gardenerRepository.delete(gardener);
     }
@@ -99,17 +101,9 @@ public class GardenerService {
     }
 
     public void evaluateTheOrder(OrderDto orderDto) {
-        log.info("По данному запросу копателей не нашлось. Измените объем работ.");
-        // по-хорошему тут нужно держать соединение с клиентом, но представим, что мы его уведомили
+        log.info("Оцениваем работу");
         Random random = new Random();
-        CreatingOrderDto updatingOrderDto = CreatingOrderDto.builder()
-                .status(orderDto.getStatus())
-                .userId(orderDto.getUser().getId())
-                .fieldId(orderDto.getField().getId())
-                .skills(orderDto.getSkills().stream().map(SkillDto::getName).toList())
-                .workType(orderDto.getWorkType())
-                .grade(random.nextInt(10))
-                .build();
-        orderService.update(updatingOrderDto, orderDto.getId());
+        orderDto.setGrade(random.nextInt(10));
+        kafkaTemplate.send("landscape.order.rated", new SendOrderToUser(null, orderDto));
     }
 }

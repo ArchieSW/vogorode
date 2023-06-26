@@ -66,6 +66,7 @@ jar {
 }
 
 dependencies {
+    implementation 'org.springframework.kafka:spring-kafka'
     implementation 'org.hibernate:hibernate-spatial'
     implementation 'org.n52.jackson:jackson-datatype-jts:1.2.10'
     implementation 'org.locationtech.jts:jts-io:1.18.2'
