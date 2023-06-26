@@ -64,6 +64,10 @@ ext {
 }
 
 dependencies {
+    implementation 'org.n52.jackson:jackson-datatype-jts:1.2.10'
+    implementation 'org.locationtech.jts:jts-io:1.18.2'
+    implementation 'org.locationtech.jts:jts-core:1.18.2'
+
     implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'

@@ -1,5 +1,6 @@
 package dev.archie.rancherservice.rancher;
 
+import dev.archie.rancherservice.landscape.dto.OrderDto;
 import dev.archie.rancherservice.rancher.dto.CreatingGardenerDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -54,4 +55,13 @@ public class GardenerController {
         gardenerService.delete(id);
     }
 
+    @PostMapping("/notify/missingWorkers")
+    public void notifyAboutMissingWorkers(@RequestBody OrderDto orderDto) {
+        gardenerService.notifyAboutMissingWorkers(orderDto);
+    }
+
+    @PostMapping("/notify/orderUpdate")
+    public void notifyAboutOrderUpdate(@RequestBody OrderDto orderDto) {
+        gardenerService.notifyAboutOrderUpdate(orderDto);
+    }
 }

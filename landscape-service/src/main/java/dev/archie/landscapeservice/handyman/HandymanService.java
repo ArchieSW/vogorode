@@ -1,5 +1,7 @@
 package dev.archie.landscapeservice.handyman;
 
+import dev.archie.landscapeservice.account.skill.Skill;
+import dev.archie.landscapeservice.account.skill.SkillRepository;
 import dev.archie.landscapeservice.handyman.dto.CreatingHandymanDto;
 import dev.archie.landscapeservice.user.exceptions.NoSuchUserException;
 import dev.archie.landscapeservice.user.type.UserType;
@@ -16,11 +18,16 @@ public class HandymanService {
 
     private final HandymanRepository handymanRepository;
     private final UserTypeRepository userTypeRepository;
+    private final SkillRepository skillRepository;
 
     public Handyman create(CreatingHandymanDto creatingHandymanDto) {
         Handyman handyman = mapCreatingHandymanDtoToHandyman(creatingHandymanDto);
         handyman.setCreatedAt(LocalDateTime.now());
         handyman.setLastUpdatedAt(LocalDateTime.now());
+        handyman.setSkills(creatingHandymanDto.getSkills().stream()
+                .map(skillName -> Skill.builder().name(skillName).build())
+                .map(skillRepository::save)
+                .toList());
         return handymanRepository.save(handyman);
     }
 

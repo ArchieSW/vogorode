@@ -1,5 +1,7 @@
 package dev.archie.landscapeservice.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import dev.archie.landscapeservice.order.Order;
 import dev.archie.landscapeservice.user.type.UserType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,8 +19,11 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -68,6 +73,10 @@ public class User {
 
     @Column(name = "last_name")
     private String lastName;
+
+    @JsonIgnoreProperties({"user", "field"})
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders = new ArrayList<>();
 
     @Override
     public boolean equals(Object o) {

@@ -8,14 +8,23 @@ import dev.archie.handymanservice.handyman.skill.Skill;
 import dev.archie.handymanservice.handyman.skill.SkillRepository;
 import dev.archie.handymanservice.landscape.HandymanClient;
 import dev.archie.handymanservice.landscape.LandscapeService;
+import dev.archie.handymanservice.landscape.Order;
+import dev.archie.handymanservice.landscape.OrderClient;
+import dev.archie.handymanservice.landscape.WorkStatus;
+import dev.archie.handymanservice.landscape.dto.CreatingOrderDto;
 import dev.archie.handymanservice.landscape.dto.HandymanDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class HandymanService {
 
     private final HandymanRepository handymanRepository;
@@ -27,6 +36,7 @@ public class HandymanService {
     private final AccountService accountService;
 
     private final HandymanClient handymanClient;
+    private final OrderClient orderClient;
 
     /**
      * @param creatingHandymanDto handyman dto create. Email should not exist
@@ -62,7 +72,7 @@ public class HandymanService {
     }
 
     /**
-     * @param id of existing profile
+     * @param id                  of existing profile
      * @param creatingHandymanDto of new fields. New email should not exist
      * @return Profile od updated handyman
      */
@@ -114,4 +124,39 @@ public class HandymanService {
                 .phone(creatingHandymanDto.getPhoneNumber())
                 .build();
     }
+
+    public boolean orderAJob(UUID innerId, Order order) {
+        if (!handymanRepository.existsByInnerId(innerId)) {
+            throw new NoSuchUserException(innerId.toString());
+        }
+        boolean acceptedTheJob = order.getSkills().stream()
+                .noneMatch(skill -> skill.getName().contains("поливать"));
+        if (acceptedTheJob) {
+            CompletableFuture.runAsync(() -> getTheJobDone(order, innerId));
+            log.info(innerId + " принял работу");
+        } else {
+            log.info(innerId + " отказался от работы");
+        }
+        return acceptedTheJob;
+    }
+
+    public void getTheJobDone(Order order, UUID innerId) {
+        Random random = new Random();
+        try {
+            Thread.sleep(random.nextLong(4000) + 3000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException("Execution was interrupted" + e);
+        }
+        order.setStatus(WorkStatus.DONE);
+        CreatingOrderDto updatingDto = CreatingOrderDto.builder()
+                .status(order.getStatus())
+                .fieldId(order.getField().getId())
+                .userId(innerId)
+                .workType(order.getWorkType())
+                .skills(order.getSkills().stream().map(Skill::getName).toList())
+                .build();
+        orderClient.update(order.getId(), updatingDto);
+        log.info(innerId + " выполнил работу");
+    }
+
 }

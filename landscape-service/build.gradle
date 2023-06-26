@@ -45,6 +45,7 @@ repositories {
 
 ext {
     set('testcontainersVersion', "1.17.6")
+    set('springCloudVersion', "2021.0.6")
 }
 
 jar {
@@ -52,6 +53,8 @@ jar {
 }
 
 dependencies {
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
     implementation 'org.hibernate:hibernate-spatial'
     implementation 'org.n52.jackson:jackson-datatype-jts:1.2.10'
     implementation 'org.locationtech.jts:jts-io:1.18.2'
@@ -86,6 +89,7 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.testcontainers:testcontainers-bom:${testcontainersVersion}"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
 
