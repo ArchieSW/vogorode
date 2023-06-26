@@ -76,7 +76,7 @@ public class User {
 
     @JsonIgnoreProperties({"user", "field"})
     @OneToMany(mappedBy = "user")
-    private List<Order> orders = new ArrayList<>();
+    private List<Order> orders;
 
     @Override
     public boolean equals(Object o) {

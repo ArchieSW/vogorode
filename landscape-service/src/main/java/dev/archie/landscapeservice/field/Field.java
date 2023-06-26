@@ -1,5 +1,6 @@
 package dev.archie.landscapeservice.field;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -44,11 +45,10 @@ public class Field {
     @Column(name = "longitude", nullable = false)
     private Double longitude;
 
-    @JsonSerialize(using = GeometrySerializer.class)
-    @JsonDeserialize(contentUsing = GeometryDeserializer.class)
+    @JsonIgnore
     private Geometry area;
 
-    @JsonIgnoreProperties("fields")
+    @JsonIgnoreProperties({"fields", "orders"})
     @ManyToOne
     @JoinColumn(name = "gardener_id")
     private Gardener gardener;

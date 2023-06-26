@@ -1,8 +1,9 @@
 package dev.archie.rancherservice.rancher;
 
-import dev.archie.rancherservice.landscape.dto.OrderDto;
+import dev.archie.landscapeservice.order.dto.SendOrderToUser;
 import dev.archie.rancherservice.rancher.dto.CreatingGardenerDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,13 +56,13 @@ public class GardenerController {
         gardenerService.delete(id);
     }
 
-    @PostMapping("/notify/missingWorkers")
-    public void notifyAboutMissingWorkers(@RequestBody OrderDto orderDto) {
-        gardenerService.notifyAboutMissingWorkers(orderDto);
+    @KafkaListener(topics = "rancher.notify.missing-workers")
+    public void notifyAboutMissingWorkers(SendOrderToUser sendOrderToUser) {
+        gardenerService.notifyAboutMissingWorkers(sendOrderToUser.order());
     }
 
-    @PostMapping("/notify/orderUpdate")
-    public void notifyAboutOrderUpdate(@RequestBody OrderDto orderDto) {
-        gardenerService.notifyAboutOrderUpdate(orderDto);
+    @KafkaListener(topics = "rancher.notify.order-updated")
+    public void notifyAboutOrderUpdate(SendOrderToUser sendOrderToUser) {
+        gardenerService.notifyAboutOrderUpdate(sendOrderToUser.order());
     }
 }

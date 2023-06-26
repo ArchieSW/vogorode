@@ -10,11 +10,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Fetch;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -55,15 +57,15 @@ public class Order {
     @JoinColumn(name = "field_id")
     private Field field;
 
-
     @JsonIgnoreProperties("orders")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany
+    @JsonIgnoreProperties("handyman")
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_id")
-    private Set<Skill> skills = new LinkedHashSet<>();
+    private Set<Skill> skills;
 
     @Column(name = "grade", nullable = false)
     private int grade;

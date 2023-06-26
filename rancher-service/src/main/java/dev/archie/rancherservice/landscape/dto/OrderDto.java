@@ -22,4 +22,6 @@ public class OrderDto {
     private User user;
 
     private List<SkillDto> skills;
+
+    private int grade;
 }

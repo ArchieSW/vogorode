@@ -6,6 +6,7 @@ import dev.archie.landscapeservice.field.Field;
 import dev.archie.landscapeservice.field.FieldService;
 import dev.archie.landscapeservice.gardener.GardenerClient;
 import dev.archie.landscapeservice.order.dto.CreatingOrderDto;
+import dev.archie.landscapeservice.order.dto.SendOrderToUser;
 import dev.archie.landscapeservice.order.exception.DirectionIsNotSpecifiedException;
 import dev.archie.landscapeservice.order.exception.NoSuchOrderException;
 import dev.archie.landscapeservice.user.User;
@@ -14,7 +15,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -32,13 +35,24 @@ public class OrderService {
     private final FieldService fieldService;
     private final OrderRepository orderRepository;
     private final SkillRepository skillRepository;
-    private final GardenerClient gardenerClient;
+    private final KafkaTemplate<String, SendOrderToUser> kafkaTemplate;
+    private final KafkaTemplate<String, Order> kafkaTemplateOrder;
 
+    @Transactional
     public Order create(CreatingOrderDto orderDto) {
         User user = userService.getById(orderDto.getUserId());
         Field field = fieldService.getById(orderDto.getFieldId());
         Order order = mapCreatingOrderDtoToOrder(orderDto, user, field);
-        return orderRepository.save(order);
+        order.setSkills(orderDto.getSkills()
+                .stream()
+                .map(skillName -> Skill.builder()
+                        .name(skillName)
+                        .build())
+                .map(skillRepository::save)
+                .collect(Collectors.toSet()));
+        order = orderRepository.save(order);
+        kafkaTemplateOrder.send("landscape.resolve.order", order);
+        return order;
     }
 
     public Order getById(Long id) {
@@ -58,6 +72,7 @@ public class OrderService {
         };
     }
 
+    @Transactional
     public Order update(CreatingOrderDto creatingOrderDto, Long id) {
         Order order = getById(id);
         WorkStatus status = creatingOrderDto.getStatus();
@@ -71,12 +86,12 @@ public class OrderService {
                 .collect(Collectors.toSet());
         order.setSkills(skills);
         order.setGrade(creatingOrderDto.getGrade());
-        Order save = orderRepository.save(order);
+        order = orderRepository.save(order);
         log.info(order.toString());
         if (order.getStatus().equals(WorkStatus.DONE)) {
-            gardenerClient.notifyAboutOrderUpdate(save);
+            kafkaTemplate.send("rancher.notify.order-updated", new SendOrderToUser(order.getField().getGardener(), order));
         }
-        return save;
+        return order;
     }
 
     public void delete(Long id) {
