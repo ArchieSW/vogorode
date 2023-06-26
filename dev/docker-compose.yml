@@ -36,6 +36,8 @@ services:
       - DB_URL=jdbc:postgresql://postgres:5432/postgres?currentSchema=public&stringtype=unspecified
       - DB_USERNAME=postgres
       - DB_PASSWORD=123
+      - RANCHER_REST_URL=http://rancher-service:8082
+      - HANDYMAN_REST_URL=http://handyman-service:8080
     depends_on:
       - rancher-service
       - handyman-service

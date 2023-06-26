@@ -1,6 +1,8 @@
 package dev.archie.landscapeservice.order;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import dev.archie.landscapeservice.account.skill.Skill;
 import dev.archie.landscapeservice.field.Field;
 import dev.archie.landscapeservice.user.User;
 import lombok.AllArgsConstructor;
@@ -17,9 +19,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Builder
 @AllArgsConstructor
@@ -49,8 +55,17 @@ public class Order {
     @JoinColumn(name = "field_id")
     private Field field;
 
-    @OneToOne
+
+    @JsonIgnoreProperties("orders")
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @OneToMany
+    @JoinColumn(name = "order_id")
+    private Set<Skill> skills = new LinkedHashSet<>();
+
+    @Column(name = "grade", nullable = false)
+    private int grade;
 
 }

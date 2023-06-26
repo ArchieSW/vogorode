@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 public interface OrderRepository extends JpaRepository<Order, Long> {
@@ -22,20 +23,30 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     List<WorkType> findDistinctByField_Id(Long id);
 
     @Query("""
-            SELECT h
-            FROM Order o JOIN o.user u
-            JOIN Handyman h ON u.id = h.id
-            WHERE o.field.id = ?1
+            select h
+            from Order o join o.user u
+            join Handyman h on u.id = h.id
+            where o.field.id = ?1
             """)
     List<Handyman> findHandymenByField_Id(Long id);
 
     @Query("""
-            SELECT COUNT(DISTINCT s) < COUNT(DISTINCT o.workType)
-            FROM Order o JOIN o.user u
-            JOIN Handyman h ON u.id = h.id
-            JOIN h.skills s
-            JOIN o.field f
-            WHERE f.id = ?1
+            select count(distinct s) < count(distinct o.workType)
+            from Order o join o.user u
+            join Handyman h on u.id = h.id
+            join h.skills s
+            join o.field f
+            where f.id = ?1
             """)
     Boolean isWorkDeficit(Long id);
+
+    @Query("""
+            select o
+            from Order o
+            where o.createdAt = (
+                select min(o1.createdAt) from Order o1
+                where o1.status = 'CREATED'
+            )
+            """)
+    Optional<Order> findFirstCreatedOrder();
 }

@@ -1,13 +1,13 @@
-package dev.archie.landscapeservice.order.dto;
+package dev.archie.rancherservice.landscape.dto;
 
-import dev.archie.landscapeservice.order.WorkStatus;
-import dev.archie.landscapeservice.order.WorkType;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 import java.util.UUID;
 
 @Data
+@Builder
 public class CreatingOrderDto {
 
     private WorkType workType;

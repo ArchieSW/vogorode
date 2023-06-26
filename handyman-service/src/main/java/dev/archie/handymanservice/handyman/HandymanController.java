@@ -1,6 +1,7 @@
 package dev.archie.handymanservice.handyman;
 
 import dev.archie.handymanservice.handyman.dto.CreatingHandymanDto;
+import dev.archie.handymanservice.landscape.Order;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -52,5 +55,10 @@ public class HandymanController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable String id) {
         handymanService.delete(id);
+    }
+
+    @PostMapping("/order/{innerId}")
+    public boolean orderAJob(@PathVariable UUID innerId, @RequestBody Order order) {
+        return handymanService.orderAJob(innerId, order);
     }
 }
