@@ -4,7 +4,6 @@ import dev.archie.landscapeservice.account.skill.Skill;
 import dev.archie.landscapeservice.account.skill.SkillRepository;
 import dev.archie.landscapeservice.field.Field;
 import dev.archie.landscapeservice.field.FieldService;
-import dev.archie.landscapeservice.gardener.GardenerClient;
 import dev.archie.landscapeservice.order.dto.CreatingOrderDto;
 import dev.archie.landscapeservice.order.dto.SendOrderToUser;
 import dev.archie.landscapeservice.order.exception.DirectionIsNotSpecifiedException;

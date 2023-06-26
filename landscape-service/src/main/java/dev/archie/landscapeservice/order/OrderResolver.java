@@ -2,7 +2,6 @@ package dev.archie.landscapeservice.order;
 
 import dev.archie.landscapeservice.account.skill.Skill;
 import dev.archie.landscapeservice.field.Field;
-import dev.archie.landscapeservice.gardener.GardenerClient;
 import dev.archie.landscapeservice.handyman.Handyman;
 import dev.archie.landscapeservice.handyman.HandymanRepository;
 import dev.archie.landscapeservice.order.dto.CreatingOrderDto;
@@ -22,7 +21,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class OrderResolver {
-    private final OrderRepository orderRepository;
 
     private final HandymanRepository handymanRepository;
     private final KafkaTemplate<String, SendOrderToUser> kafkaTemplate;
