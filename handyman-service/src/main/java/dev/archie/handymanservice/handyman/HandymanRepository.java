@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface HandymanRepository extends MongoRepository<Handyman, String> {
     boolean existsByInnerId(UUID innerId);
-    Optional<Handyman> findByInnerId(UUID innerId);
 }

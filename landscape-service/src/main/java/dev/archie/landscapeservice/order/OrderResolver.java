@@ -8,8 +8,6 @@ import dev.archie.landscapeservice.handyman.HandymanClient;
 import dev.archie.landscapeservice.handyman.HandymanRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +22,6 @@ import java.util.Set;
 @Slf4j
 public class OrderResolver {
 
-    private static final int PAGE_SIZE = 10;
     private final OrderRepository orderRepository;
     private final HandymanRepository handymanRepository;
     private final HandymanClient handymanClient;
